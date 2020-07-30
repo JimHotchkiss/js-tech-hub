@@ -67,13 +67,13 @@ html {
   /* width: 1920px; */
   width: 100%;
   /* height: 898px; */
-  height: 742px;
-  background: lightsalmon;
+  height: 738px;
+  background: #ffffff 0% 0% no-repeat padding-box;
 }
 
 .side-navbar {
   width: 60px;
-  height: 742px;
+  height: 738px;
   background: #414141;
 }
 
@@ -86,6 +86,10 @@ html {
   padding-left: 9px;
   background-color: #2b72cc;
   border-radius: 50%;
+}
+
+.round-image-div:hover {
+  cursor: pointer;
 }
 
 .home-icon {
@@ -108,9 +112,27 @@ html {
   background-size: 18px;
 }
 
+.printer-icon:hover {
+  cursor: pointer;
+}
+
 .consoles-container {
   width: 240px;
   /* height: 898px; */
-  height: 742px;
-  background: lightyellow;
+  height: 738px;
+  background: #f7f7f7;
+}
+
+.cameras-title p {
+  font-family: Roboto;
+  letter-spacing: 0px;
+  color: #414141;
+  opacity: 1;
+}
+
+.camera-div p {
+  font-family: Roboto;
+  letter-spacing: 0px;
+  color: #707070;
+  opacity: 1;
 }
