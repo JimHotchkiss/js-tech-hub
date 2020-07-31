@@ -148,6 +148,10 @@ html {
   padding-top: 14px;
 }
 
+.camera-div:hover {
+  cursor: pointer;
+}
+
 .camera-tag-div {
   width: 80px;
   padding-left: 14px;
@@ -172,4 +176,66 @@ html {
     padding-box;
   opacity: 1;
   background-size: 18px;
+}
+
+/* Monitors */
+.monitors-div {
+  max-height: 0;
+  overflow-y: hidden;
+  transition: all 0.3s ease-in;
+  width: 180px;
+}
+
+.monitor-title-div {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.monitor-title-div p {
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  color: #4c5468;
+  opacity: 1;
+}
+
+.monitors-div-active {
+  max-height: 1000px;
+  height: auto;
+  transition: all 0.3s ease-out;
+  padding-left: 16px;
+}
+
+.monitor-btn-div {
+  width: 90%;
+  height: 30px;
+  margin-bottom: 6px;
+  background: #eaeaea;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.monitor-btn-div:hover {
+  background: #2b72cc;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.monitor-btn-div:hover p {
+  color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+.monitor-btn-div p {
+  /* margin-top: 18px; */
+  padding-top: 8px;
+  padding-left: 12px;
+  font-family: Roboto;
+  font-weight: 300;
+  font-size: 12px;
+  /* color: #262626; */
+  /* color: #fff; */
+  color: #707070;
+  opacity: 1;
 }
