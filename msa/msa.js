@@ -5,10 +5,9 @@ window.onload = function loadCcus() {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
       setCcuState(currentCcu);
-      openMonitorsDiv(currentCcu);
-      clearMonitorsHtml();
     });
   }
+  // selectDisplay();
 };
 
 const state = {
@@ -23,53 +22,45 @@ const displays = {
 };
 
 const setCcuState = (currentCcu) => {
-  if (state.camera.name !== "") {
-    // closeMonitorsDivs();
+  const cameraDisplayDiv = state.camera.name;
+  if (state.camera.name === currentCcu) {
+    closeDisplayDiv(cameraDisplayDiv);
+    state.camera.name = "";
+    state.clicked = false;
+  } else if (state.camera.name !== "") {
+    closeDisplayDiv(cameraDisplayDiv);
+    state.camera.name = currentCcu;
+    state.camera.clicked = true;
+    openMonitorsDiv(currentCcu);
   } else {
     state.camera.name = currentCcu;
     state.camera.clicked = true;
+    openMonitorsDiv(currentCcu);
   }
+  selectDisplay();
 };
 
-const clearMonitorsHtml = () => {
-  const monitorsDivs = document.getElementsByClassName("monitors-div");
-  for (let item of monitorsDivs) {
-    console.log(item);
-    // while (item.firstChild) {
-    //   monitorsDivs.removeChild(item.firstChild);
-    // }
-  }
+const closeDisplayDiv = (cameraDisplayDiv) => {
+  const monitorsDiv = document.getElementById(
+    cameraDisplayDiv + "-monitors-div"
+  );
+  monitorsDiv.className = "monitors-div";
 };
-
-// const closeMonitorsDivs = () => {
-//   const monitorsDivs = document.getElementsByClassName("monitors-div");
-//   console.log(monitorsDivs);
-//   for (let item of monitorsDivs) {
-//     item.className = "monitors-div";
-//   }
-// };
 
 const openMonitorsDiv = (currentCcu) => {
   const monitorsDiv = document.getElementById(currentCcu + "-monitors-div");
   monitorsDiv.className = "monitors-div-active";
-  showMonitors(monitorsDiv, currentCcu);
 };
 
-const showMonitors = (monitorsDiv, currentCcu) => {
-  let monitors = "";
-  if (currentCcu === "1688") {
-    monitors = displays.sixteen;
-  } else {
-    monitors = displays.fifteen;
+const selectDisplay = () => {
+  const monitorBtnDivs = document.getElementsByClassName("monitor-btn-div");
+  console.log(monitorBtnDivs);
+  for (let item of monitorBtnDivs) {
+    item.addEventListener("click", () => {
+      const selectedDisplay = event.currentTarget.dataset.display;
+      const displayBtn = document.getElementById(selectedDisplay);
+      displayBtn.className = "monitor-btn-div-active";
+      console.log(displayBtn);
+    });
   }
-  monitors.map((monitor) => {
-    const monitorBtnDiv = document.createElement("div");
-    monitorBtnDiv.setAttribute("class", "monitor-btn-div");
-    monitorBtnDiv.setAttribute("data-display", monitor.name);
-    const monitorBtnTag = document.createElement("p");
-    monitorBtnTag.setAttribute("class", "monitor-btn-tag");
-    monitorBtnTag.innerHTML = monitor.name;
-    monitorBtnDiv.appendChild(monitorBtnTag);
-    monitorsDiv.appendChild(monitorBtnDiv);
-  });
 };
