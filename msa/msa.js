@@ -7,7 +7,7 @@ window.onload = function loadCcus() {
       selectCCu(currentCcu);
     });
   }
-  // selectDisplay();
+  displayEventListener();
 };
 
 const state = {
@@ -24,11 +24,6 @@ const displays = {
 const monitorBtnDivs = document.getElementsByClassName("monitor-btn-div");
 
 const selectCCu = (currentCcu) => {
-  console.log(
-    state.camera.name === currentCcu &&
-      state.display.name !== "" &&
-      state.specialty.name !== ""
-  );
   const cameraDisplayDiv = state.camera.name;
   if (
     state.camera.name === currentCcu &&
@@ -42,7 +37,6 @@ const selectCCu = (currentCcu) => {
     // resetDisplayBtn()
     // resetCCuState()
   } else if (state.camera.name === currentCcu && state.display.name !== "") {
-    console.log("ccu and display");
     closeDisplayDiv(cameraDisplayDiv);
     resetCcuState();
     resetDisplayBtn();
@@ -78,18 +72,21 @@ const selectCCu = (currentCcu) => {
     setCcuState(currentCcu);
     openMonitorsDiv(currentCcu);
   }
-  selectDisplay();
 };
 
-const selectDisplay = () => {
+const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
       const currentDisplay = event.currentTarget.dataset.display;
-      setDisplayState(currentDisplay);
-      if (item.className === "monitor-btn-div-active") {
-        item.className = "monitor-btn-div";
+      console.log(currentDisplay, state.display.name);
+      if (state.display.name === currentDisplay) {
+        resetDisplayState();
+        resetDisplayBtn();
       } else {
-        item.className = "monitor-btn-div-active";
+        console.log("else", item);
+        setDisplayState(currentDisplay);
+        reasignDisplayBtn();
+        // item.className = "monitor-btn-div-active";
       }
     });
   }
@@ -97,6 +94,7 @@ const selectDisplay = () => {
 
 const setCcuState = (currentCcu) => {
   state.camera.name = currentCcu;
+  state.camera.clicked = true;
 };
 const resetCcuState = () => {
   state.camera.name = "";
@@ -137,6 +135,7 @@ const openMonitorsDiv = (currentCcu) => {
 };
 
 const resetDisplayBtn = () => {
+  console.log("reset display btn");
   const displayBtnDiv = document.getElementsByClassName(
     "monitor-btn-div-active"
   );
@@ -150,8 +149,8 @@ const reasignDisplayBtn = () => {
   const displayBtnDiv = document.getElementById(
     state.camera.name + "-" + state.display.name
   );
-  console.log(state.camera.name + "-" + state.display.name);
   if (displayBtnDiv !== null) {
+    console.log("not null", state.display);
     displayBtnDiv.className = "monitor-btn-div-active";
   } else {
     resetDisplayState();
