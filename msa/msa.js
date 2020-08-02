@@ -42,31 +42,31 @@ const selectCCu = (currentCcu) => {
     // resetDisplayBtn()
     // resetCCuState()
   } else if (state.camera.name === currentCcu && state.display.name !== "") {
+    console.log("ccu and display");
     closeDisplayDiv(cameraDisplayDiv);
-    // resetDisplayState()
-    // resetDisplayBtn()
-    // resetCCuState()
+    resetCcuState();
+    resetDisplayBtn();
+    resetDisplayState();
   } else if (state.camera.name === currentCcu) {
     closeDisplayDiv(cameraDisplayDiv);
-    state.camera.name = "";
-    state.camera.clicked = false;
+    resetCcuState();
   } else if (
     state.camera.name !== "" &&
     state.display.name !== "" &&
     state.specialty.name !== ""
   ) {
-    console.log("here");
+    console.log("all 3 selected");
     setCcuState(currentCcu);
     closeDisplayDiv(cameraDisplayDiv);
     // resetSpecialtyState()
     // closeSpecialtyDiv()
-    resetDisplayBtn();
-    checkAndSwitchDisplayBtn();
+    reasignDisplayBtn();
     openMonitorsDiv(currentCcu);
   } else if (state.camera.name !== "" && state.display.name !== "") {
-    console.log("ccu and display");
+    console.log("2 selected");
+    setCcuState(currentCcu);
     closeDisplayDiv(cameraDisplayDiv);
-    resetDisplayBtn();
+    reasignDisplayBtn();
     openMonitorsDiv(currentCcu);
   } else if (state.camera.name !== "") {
     closeDisplayDiv(cameraDisplayDiv);
@@ -74,16 +74,17 @@ const selectCCu = (currentCcu) => {
     state.camera.clicked = true;
     openMonitorsDiv(currentCcu);
   } else {
-    state.camera.name = currentCcu;
-    state.camera.clicked = true;
+    console.log("first selection");
+    setCcuState(currentCcu);
     openMonitorsDiv(currentCcu);
   }
   selectDisplay();
 };
 
-const selectDisplay = (currentDisplay) => {
+const selectDisplay = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
+      const currentDisplay = event.currentTarget.dataset.display;
       setDisplayState(currentDisplay);
       if (item.className === "monitor-btn-div-active") {
         item.className = "monitor-btn-div";
@@ -97,22 +98,37 @@ const selectDisplay = (currentDisplay) => {
 const setCcuState = (currentCcu) => {
   state.camera.name = currentCcu;
 };
+const resetCcuState = () => {
+  state.camera.name = "";
+  state.camera.clicked = false;
+};
+
 const setDisplayState = (currentDisplay) => {
+  console.log("set display state", currentDisplay);
   state.display.name = currentDisplay;
   state.display.clicked = true;
 };
-
 const resetDisplayState = () => {
+  console.log("reset display state");
   state.display.name = "";
   state.display.clicked = false;
 };
 
+const setSpecialtyState = () => {
+  state.specialty.name = currentSpecialty;
+  state.specialty.clicked = true;
+};
+const resetSpecialtyState = () => {
+  state.specialty.name = "";
+  state.specialty.clicked = false;
+};
+
 const closeDisplayDiv = (cameraDisplayDiv) => {
+  console.log("close display div");
   const monitorsDiv = document.getElementById(
     cameraDisplayDiv + "-monitors-div"
   );
   monitorsDiv.className = "monitors-div";
-  resetDisplayBtn();
 };
 
 const openMonitorsDiv = (currentCcu) => {
@@ -121,16 +137,16 @@ const openMonitorsDiv = (currentCcu) => {
 };
 
 const resetDisplayBtn = () => {
-  const displayDivs = document.getElementsByClassName("monitor-btn-div");
-  for (let item of displayDivs) {
-    if (item.className === "monitor-btn-div-active") {
-      item.className === "monitor-btn-div";
-    }
+  const displayBtnDiv = document.getElementsByClassName(
+    "monitor-btn-div-active"
+  );
+  for (let item of displayBtnDiv) {
+    item.className = "monitor-btn-div";
   }
-  checkAndSwitchDisplayBtn();
 };
 
-const checkAndSwitchDisplayBtn = () => {
+const reasignDisplayBtn = () => {
+  resetDisplayBtn();
   const displayBtnDiv = document.getElementById(
     state.camera.name + "-" + state.display.name
   );
@@ -138,6 +154,6 @@ const checkAndSwitchDisplayBtn = () => {
   if (displayBtnDiv !== null) {
     displayBtnDiv.className = "monitor-btn-div-active";
   } else {
-    // resetDisplayState();
+    resetDisplayState();
   }
 };
