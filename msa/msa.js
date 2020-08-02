@@ -4,7 +4,7 @@ window.onload = function loadCcus() {
   for (let item of camerasDiv) {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
-      setCcuState(currentCcu);
+      selectCCu(currentCcu);
     });
   }
   // selectDisplay();
@@ -21,13 +21,53 @@ const displays = {
   fifteen: [{ name: "4k" }, { name: "Vision Pro" }, { name: "Vision Elect" }],
 };
 
-const setCcuState = (currentCcu) => {
+const monitorBtnDivs = document.getElementsByClassName("monitor-btn-div");
+
+const selectCCu = (currentCcu) => {
+  console.log(
+    state.camera.name === currentCcu &&
+      state.display.name !== "" &&
+      state.specialty.name !== ""
+  );
   const cameraDisplayDiv = state.camera.name;
-  if (state.camera.name === currentCcu) {
+  if (
+    state.camera.name === currentCcu &&
+    state.display.name !== "" &&
+    state.specialty.name !== ""
+  ) {
     closeDisplayDiv(cameraDisplayDiv);
-    resetDisplayBtns();
+    // resetSpecialtyState()
+    // closeSpecialtyDiv()
+    // resetDisplayState()
+    // resetDisplayBtn()
+    // resetCCuState()
+  } else if (state.camera.name === currentCcu && state.display.name !== "") {
+    closeDisplayDiv(cameraDisplayDiv);
+    // resetDisplayState()
+    // resetDisplayBtn()
+    // resetCCuState()
+  } else if (state.camera.name === currentCcu) {
+    closeDisplayDiv(cameraDisplayDiv);
     state.camera.name = "";
     state.camera.clicked = false;
+  } else if (
+    state.camera.name !== "" &&
+    state.display.name !== "" &&
+    state.specialty.name !== ""
+  ) {
+    console.log("here");
+    setCcuState(currentCcu);
+    closeDisplayDiv(cameraDisplayDiv);
+    // resetSpecialtyState()
+    // closeSpecialtyDiv()
+    resetDisplayBtn();
+    checkAndSwitchDisplayBtn();
+    openMonitorsDiv(currentCcu);
+  } else if (state.camera.name !== "" && state.display.name !== "") {
+    console.log("ccu and display");
+    closeDisplayDiv(cameraDisplayDiv);
+    resetDisplayBtn();
+    openMonitorsDiv(currentCcu);
   } else if (state.camera.name !== "") {
     closeDisplayDiv(cameraDisplayDiv);
     state.camera.name = currentCcu;
@@ -41,11 +81,38 @@ const setCcuState = (currentCcu) => {
   selectDisplay();
 };
 
+const selectDisplay = (currentDisplay) => {
+  for (let item of monitorBtnDivs) {
+    item.addEventListener("click", () => {
+      setDisplayState(currentDisplay);
+      if (item.className === "monitor-btn-div-active") {
+        item.className = "monitor-btn-div";
+      } else {
+        item.className = "monitor-btn-div-active";
+      }
+    });
+  }
+};
+
+const setCcuState = (currentCcu) => {
+  state.camera.name = currentCcu;
+};
+const setDisplayState = (currentDisplay) => {
+  state.display.name = currentDisplay;
+  state.display.clicked = true;
+};
+
+const resetDisplayState = () => {
+  state.display.name = "";
+  state.display.clicked = false;
+};
+
 const closeDisplayDiv = (cameraDisplayDiv) => {
   const monitorsDiv = document.getElementById(
     cameraDisplayDiv + "-monitors-div"
   );
   monitorsDiv.className = "monitors-div";
+  resetDisplayBtn();
 };
 
 const openMonitorsDiv = (currentCcu) => {
@@ -53,53 +120,24 @@ const openMonitorsDiv = (currentCcu) => {
   monitorsDiv.className = "monitors-div-active";
 };
 
-const selectDisplay = () => {
-  const monitorBtnDivs = document.getElementsByClassName("monitor-btn-div");
-  for (let item of monitorBtnDivs) {
-    item.addEventListener("click", () => {
-      const selectedDisplay = event.currentTarget.dataset.display;
-      setDisplayState(selectedDisplay);
-    });
-  }
-};
-
-const setDisplayState = (selectedDisplay) => {
-  if (state.display.name === selectedDisplay) {
-    deselectDisplay(selectedDisplay);
-    state.display.name = "";
-    state.display.clicked = false;
-  } else if (state.display.name !== "") {
-    resetDisplayBtns();
-    setDisplayBtn(selectedDisplay);
-    state.display.name = selectedDisplay;
-    state.display.clicked = true;
-  } else {
-    state.display.name = selectedDisplay;
-    state.display.clicked = true;
-    setDisplayBtn(selectedDisplay);
-  }
-};
-
-const deselectDisplay = (selectedDisplay) => {
-  console.log(selectedDisplay, state.display);
-  const displayBtn = document.getElementById(selectedDisplay);
-  if (displayBtn !== null) {
-    displayBtn.className = "monitor-btn-div";
-  }
-};
-
-const setDisplayBtn = (selectedDisplay) => {
-  const displayBtn = document.getElementById(selectedDisplay);
-  if (displayBtn !== null) {
-    displayBtn.className = "monitor-btn-div-active";
-  }
-};
-
-const resetDisplayBtns = () => {
-  const displayBtns = document.getElementsByClassName("monitor-btn-div-active");
-  for (let item of displayBtns) {
-    if (item !== null) {
-      item.className = "monitor-btn-div";
+const resetDisplayBtn = () => {
+  const displayDivs = document.getElementsByClassName("monitor-btn-div");
+  for (let item of displayDivs) {
+    if (item.className === "monitor-btn-div-active") {
+      item.className === "monitor-btn-div";
     }
+  }
+  checkAndSwitchDisplayBtn();
+};
+
+const checkAndSwitchDisplayBtn = () => {
+  const displayBtnDiv = document.getElementById(
+    state.camera.name + "-" + state.display.name
+  );
+  console.log(state.camera.name + "-" + state.display.name);
+  if (displayBtnDiv !== null) {
+    displayBtnDiv.className = "monitor-btn-div-active";
+  } else {
+    // resetDisplayState();
   }
 };
