@@ -76,6 +76,7 @@ const selectCCu = (currentCcu) => {
     rotateOpenArrow();
     reasignDisplayBtn();
     openMonitorsDiv(currentCcu);
+    changeInfoText();
   } else if (state.camera.name !== "") {
     console.log("6");
     setCcuState(currentCcu);
@@ -83,11 +84,13 @@ const selectCCu = (currentCcu) => {
     rotateCloseArrow();
     rotateOpenArrow();
     openMonitorsDiv(currentCcu);
+    changeInfoText();
   } else {
     console.log("7");
     setCcuState(currentCcu);
     openMonitorsDiv(currentCcu);
     rotateOpenArrow();
+    changeInfoText();
   }
 };
 
@@ -105,18 +108,38 @@ const rotateCloseArrow = () => {
   }
 };
 
+const changeInfoText = () => {
+  console.log(state);
+  const infoTag = document.getElementById("info-tag-text");
+  if (
+    state.camera.name !== "" &&
+    (state.display.name !== "") & (state.specialty.name !== "")
+  ) {
+    infoTag.innerText = "Select specialty";
+  } else if (
+    state.camera.name !== "" &&
+    (state.display.name !== "") & (state.specialty.name === "")
+  ) {
+    infoTag.innerText = "Select specialty";
+  } else if (
+    state.camera.name !== "" &&
+    (state.display.name === "") & (state.specialty.name === "")
+  ) {
+    infoTag.innerText = "Select a display and a specialy";
+  }
+};
+
 const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
       const currentDisplay = event.currentTarget.dataset.display;
-      console.log(currentDisplay, state.display.name);
       if (state.display.name === currentDisplay) {
         resetDisplayState();
         resetDisplayBtn();
       } else {
         setDisplayState(currentDisplay);
         reasignDisplayBtn();
-        // item.className = "monitor-btn-div-active";
+        changeInfoText();
       }
     });
   }
