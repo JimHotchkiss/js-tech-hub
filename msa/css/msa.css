@@ -185,18 +185,6 @@ html {
   transform: translateY(-50%) rotate(-180deg);
 }
 
-/* .arrow-div {
-  position: relative;
-  left: 70px;
-  width: 24px;
-  height: 24px;
-  float: right;
-  background: transparent url("../img/icon-arrow.svg") 0% 0% no-repeat
-    padding-box;
-  opacity: 1;
-  background-size: 18px;
-} */
-
 /* Monitors */
 .monitors-div {
   max-height: 0;
@@ -278,4 +266,48 @@ html {
   /* color: #fff; */
   color: #707070;
   opacity: 1;
+}
+
+/* Specialty container */
+.settings-info-container {
+  display: flex;
+  flex-direction: column;
+  height: 700px;
+  width: 1000px;
+  background: lightgrey;
+}
+
+.info-container {
+  display: flex;
+  flex-direction: column;
+  height: 200px;
+  width: 700px;
+  background: lightgreen;
+}
+
+.title-div {
+  height: 100px;
+  width: 600px;
+  margin: 8px;
+  background: lightgoldenrodyellow;
+}
+
+.specialty-div {
+  height: 100px;
+  width: 600px;
+  margin: 8px;
+  background: lightsalmon;
+}
+
+.info-div {
+  height: 100px;
+  width: 600px;
+  margin: 8px;
+  background: lightpink;
+}
+
+.settings-container {
+  height: 500px;
+  width: 700px;
+  background: lightskyblue;
 }
