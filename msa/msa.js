@@ -49,11 +49,15 @@ const selectCCu = (currentCcu) => {
     resetCcuState();
     resetDisplayBtn();
     resetDisplayState();
+    changeInfoText();
+    hideSpecialties();
   } else if (state.camera.name === currentCcu) {
     console.log("3");
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
     resetCcuState();
+    changeInfoText();
+    hideSpecialties();
   } else if (
     state.camera.name !== "" &&
     state.display.name !== "" &&
@@ -109,23 +113,26 @@ const rotateCloseArrow = () => {
 };
 
 const changeInfoText = () => {
-  console.log(state);
   const infoTag = document.getElementById("info-tag-text");
   if (
     state.camera.name !== "" &&
     (state.display.name !== "") & (state.specialty.name !== "")
   ) {
-    infoTag.innerText = "Select specialty";
+    infoTag.innerText = "Select Specialty to populate settings...";
   } else if (
     state.camera.name !== "" &&
     (state.display.name !== "") & (state.specialty.name === "")
   ) {
-    infoTag.innerText = "Select specialty";
+    infoTag.innerText = "Select Specialty to populate settings...";
   } else if (
     state.camera.name !== "" &&
     (state.display.name === "") & (state.specialty.name === "")
   ) {
-    infoTag.innerText = "Select a display and a specialy";
+    infoTag.innerText =
+      "Select a Display and a Specialy to populate settings...";
+  } else {
+    infoTag.innerText =
+      "Select CCU, Display and Specialty to populate settings...";
   }
 };
 
@@ -140,9 +147,35 @@ const displayEventListener = () => {
         setDisplayState(currentDisplay);
         reasignDisplayBtn();
         changeInfoText();
+        listSpecialties();
       }
     });
   }
+};
+
+const listSpecialties = () => {
+  showSpecialties();
+  const specialtiesParentDiv = document.getElementById(
+    "specialties-parent-div"
+  );
+  const specialityBtnDiv = document.createElement("div");
+  specialityBtnDiv.setAttribute("class", "specialty-btn-div");
+  const specialityBtnTag = document.createElement("p");
+  specialityBtnTag.setAttribute("class", "specialty-btn-tag");
+  specialityBtnTag.innerHTML = "Lap 1";
+  specialityBtnDiv.appendChild(specialityBtnTag);
+  specialtiesParentDiv.appendChild(specialityBtnDiv);
+};
+
+const showSpecialties = () => {
+  const specialtiesDiv = document.getElementById("specialties-div");
+  specialtiesDiv.id = "specialties-div-show";
+};
+
+const hideSpecialties = () => {
+  console.log("hide");
+  const specialtiesDiv = document.getElementById("specialties-div-show");
+  specialtiesDiv.id = "specialties-div";
 };
 
 const setCcuState = (currentCcu) => {
