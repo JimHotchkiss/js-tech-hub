@@ -1,6 +1,7 @@
 window.onload = function loadCcus() {
   ccuEventListener();
   displayEventListener();
+  // specialtiesEventListener();
 };
 
 const state = {
@@ -8,6 +9,26 @@ const state = {
   display: { name: "", clicked: false },
   specialty: { name: "", clicked: false },
 };
+
+// Specialties
+const SPECIALTIES = [
+  "Multi",
+  "Arthro 1",
+  "Arthro 2",
+  "Arthro 4/16",
+  "Lap 1",
+  "Lap 2",
+  "Lap Storz",
+  "Cysto",
+  "Hysteroscopy",
+  "Flexiscope",
+  "ENT",
+  "Laser",
+  "Microscope",
+  "Standard",
+  "Vein Harvest",
+  "Olympus GI",
+];
 
 const displays = {
   sixteen: [{ name: "4k" }, { name: "Vision Pro" }],
@@ -153,18 +174,33 @@ const displayEventListener = () => {
   }
 };
 
+const specialtiesEventListener = () => {
+  const specialityBtnDiv = document.getElementsByClassName("specialty-btn-div");
+  for (let item of specialityBtnDiv) {
+    item.addEventListener("click", () => {
+      alert(event.currentTarget);
+    });
+  }
+};
+
 const listSpecialties = () => {
   showSpecialties();
   const specialtiesParentDiv = document.getElementById(
     "specialties-parent-div"
   );
-  const specialityBtnDiv = document.createElement("div");
-  specialityBtnDiv.setAttribute("class", "specialty-btn-div");
-  const specialityBtnTag = document.createElement("p");
-  specialityBtnTag.setAttribute("class", "specialty-btn-tag");
-  specialityBtnTag.innerHTML = "Lap 1";
-  specialityBtnDiv.appendChild(specialityBtnTag);
-  specialtiesParentDiv.appendChild(specialityBtnDiv);
+
+  SPECIALTIES.map((specialty) => {
+    const specialityBtnDiv = document.createElement("div");
+    specialityBtnDiv.setAttribute("class", "specialty-btn-div");
+    specialityBtnDiv.setAttribute("data-specialty", specialty);
+    const specialityBtnTag = document.createElement("p");
+    specialityBtnTag.setAttribute("class", "specialty-btn-tag");
+    specialityBtnTag.innerHTML = specialty;
+    specialityBtnDiv.appendChild(specialityBtnTag);
+    specialtiesParentDiv.appendChild(specialityBtnDiv);
+  });
+
+  specialtiesEventListener();
 };
 
 const showSpecialties = () => {
