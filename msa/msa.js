@@ -16,18 +16,18 @@ const SPECIALTIES = [
   "Arthro 1",
   "Arthro 2",
   "Arthro 4/16",
-  "Lap 1",
-  "Lap 2",
-  "Lap Storz",
-  "Cysto",
-  "Hysteroscopy",
-  "Flexiscope",
-  "ENT",
-  "Laser",
-  "Microscope",
-  "Standard",
-  "Vein Harvest",
-  "Olympus GI",
+  // "Lap 1",
+  // "Lap 2",
+  // "Lap Storz",
+  // "Cysto",
+  // "Hysteroscopy",
+  // "Flexiscope",
+  // "ENT",
+  // "Laser",
+  // "Microscope",
+  // "Standard",
+  // "Vein Harvest",
+  // "Olympus GI",
 ];
 
 const displays = {
@@ -72,6 +72,7 @@ const selectCCu = (currentCcu) => {
     resetDisplayState();
     changeInfoText();
     hideSpecialties();
+    removeSpecialtyHtmlElements();
   } else if (state.camera.name === currentCcu) {
     console.log("3");
     closeDisplayDiv(cameraDisplayDiv);
@@ -120,13 +121,10 @@ const selectCCu = (currentCcu) => {
 };
 
 const rotateOpenArrow = () => {
-  console.log("open arrow");
   const arrowDiv = document.getElementById(state.camera.name + "-arrow");
-  console.log("open arrow", arrowDiv);
   arrowDiv.className = arrowDiv.className + " open";
 };
 const rotateCloseArrow = () => {
-  console.log("close arrow");
   const arrowDivs = document.getElementsByClassName("arrow-outer-div open");
   for (let item of arrowDivs) {
     item.className = "arrow-outer-div";
@@ -212,6 +210,29 @@ const hideSpecialties = () => {
   console.log("hide");
   const specialtiesDiv = document.getElementById("specialties-div-show");
   specialtiesDiv.id = "specialties-div";
+};
+
+const removeSpecialtyHtmlElements = () => {
+  const parentDiv = document.getElementById("specialties-div");
+
+  while (parentDiv.hasChildNodes()) {
+    console.log("sup");
+  }
+  // function clearInner(node) {
+  //   while (node.hasChildNodes()) {
+  //     clear(node.firstChild);
+  //   }
+  // }
+
+  // function clear(node) {
+  //   while (node.hasChildNodes()) {
+  //     clear(node.firstChild);
+  //   }
+  //   node.parentNode.removeChild(node);
+  //   console.log(node, "cleared!");
+  // }
+
+  // clearInner(n);
 };
 
 const setCcuState = (currentCcu) => {
