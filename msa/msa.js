@@ -213,26 +213,10 @@ const hideSpecialties = () => {
 };
 
 const removeSpecialtyHtmlElements = () => {
-  const parentDiv = document.getElementById("specialties-div");
-
-  while (parentDiv.hasChildNodes()) {
-    console.log("sup");
+  const parentDiv = document.getElementById("specialties-parent-div");
+  while (parentDiv.firstChild) {
+    parentDiv.removeChild(parentDiv.firstChild);
   }
-  // function clearInner(node) {
-  //   while (node.hasChildNodes()) {
-  //     clear(node.firstChild);
-  //   }
-  // }
-
-  // function clear(node) {
-  //   while (node.hasChildNodes()) {
-  //     clear(node.firstChild);
-  //   }
-  //   node.parentNode.removeChild(node);
-  //   console.log(node, "cleared!");
-  // }
-
-  // clearInner(n);
 };
 
 const setCcuState = (currentCcu) => {
