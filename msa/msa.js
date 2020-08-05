@@ -1,6 +1,7 @@
 window.onload = function loadCcus() {
   ccuEventListener();
   displayEventListener();
+  formEventListener();
   // specialtiesEventListener();
 };
 
@@ -16,23 +17,23 @@ const SPECIALTIES = [
   "Arthro 1",
   "Arthro 2",
   "Arthro 4/16",
-  // "Lap 1",
-  // "Lap 2",
-  // "Lap Storz",
-  // "Cysto",
-  // "Hysteroscopy",
-  // "Flexiscope",
-  // "ENT",
-  // "Laser",
-  // "Microscope",
-  // "Standard",
-  // "Vein Harvest",
-  // "Olympus GI",
+  "Lap 1",
+  "Lap 2",
+  "Lap Storz",
+  "Cysto",
+  "Hysteroscopy",
+  "Flexiscope",
+  "ENT",
+  "Laser",
+  "Microscope",
+  "Standard",
+  "Vein Harvest",
+  "Olympus GI",
 ];
 
 const displays = {
   sixteen: [{ name: "4k" }, { name: "Vision Pro" }],
-  fifteen: [{ name: "4k" }, { name: "Vision Pro" }, { name: "Vision Elect" }],
+  legacy: [{ name: "4k" }, { name: "Vision Pro" }, { name: "Vision Elect" }],
 };
 
 const monitorBtnDivs = document.getElementsByClassName("monitor-btn-div");
@@ -46,6 +47,15 @@ const ccuEventListener = () => {
       selectCCu(currentCcu);
     });
   }
+};
+
+const formEventListener = () => {
+  const formLink = document.getElementById("form-link");
+  formLink.addEventListener("click", () => {
+    window.open(
+      "https://forms.office.com/Pages/ResponsePage.aspx?id=-7udTko5g0WIEFP4H4GeOyvF9t6kmYZAnEVeps1nibRUQThHUjlOV1FOSEVOMlJXWEtaVE1TVTc5WS4u"
+    );
+  });
 };
 
 const selectCCu = (currentCcu) => {
@@ -73,6 +83,7 @@ const selectCCu = (currentCcu) => {
     changeInfoText();
     hideSpecialties();
     removeSpecialtyHtmlElements();
+    removeDisplayBtnHtml();
   } else if (state.camera.name === currentCcu) {
     console.log("3");
     closeDisplayDiv(cameraDisplayDiv);
@@ -80,6 +91,7 @@ const selectCCu = (currentCcu) => {
     resetCcuState();
     changeInfoText();
     hideSpecialties();
+    removeDisplayBtnHtml();
   } else if (
     state.camera.name !== "" &&
     state.display.name !== "" &&
@@ -112,7 +124,7 @@ const selectCCu = (currentCcu) => {
     openMonitorsDiv(currentCcu);
     changeInfoText();
   } else {
-    console.log("7");
+    console.log("first pick", "7");
     setCcuState(currentCcu);
     openMonitorsDiv(currentCcu);
     rotateOpenArrow();
@@ -203,13 +215,17 @@ const listSpecialties = () => {
 
 const showSpecialties = () => {
   const specialtiesDiv = document.getElementById("specialties-div");
-  specialtiesDiv.id = "specialties-div-show";
+  if (specialtiesDiv !== null) {
+    specialtiesDiv.id = "specialties-div-show";
+  }
 };
 
 const hideSpecialties = () => {
   console.log("hide");
   const specialtiesDiv = document.getElementById("specialties-div-show");
-  specialtiesDiv.id = "specialties-div";
+  if (specialtiesDiv !== null) {
+    specialtiesDiv.id = "specialties-div";
+  }
 };
 
 const removeSpecialtyHtmlElements = () => {
@@ -256,7 +272,56 @@ const closeDisplayDiv = (cameraDisplayDiv) => {
 const openMonitorsDiv = (currentCcu) => {
   const monitorsDiv = document.getElementById(currentCcu + "-monitors-div");
   monitorsDiv.className = "monitors-div-active";
+  assignCurrentDisplays(currentCcu);
 };
+
+const assignCurrentDisplays = (currentCcu) => {
+  let currentDisplays = "";
+  if (currentCcu === "1688") {
+    currentDisplays = displays.sixteen;
+    showCurrentDisplays(currentDisplays, currentCcu);
+  } else {
+    currentDisplays = displays.legacy;
+    showCurrentDisplays(currentDisplays, currentCcu);
+  }
+  displayEventListener();
+};
+
+const showCurrentDisplays = (currentDisplays, currentCcu) => {
+  console.log(currentDisplays);
+  const monitorBtnsDiv = document.getElementById(
+    currentCcu + "-monitors-btns-div"
+  );
+  currentDisplays.map((display) => {
+    const monitorBtnDiv = document.createElement("div");
+    monitorBtnDiv.setAttribute(
+      "id",
+      currentCcu + "-" + display.getElementsByClassName
+    );
+    monitorBtnDiv.setAttribute("class", "monitor-btn-div");
+    monitorBtnDiv.setAttribute("data-monitor", display.name);
+    const monitorBtnTag = document.createElement("p");
+    monitorBtnTag.setAttribute("class", "monitor-btn-tag");
+    monitorBtnTag.innerHTML = display.name;
+    monitorBtnDiv.appendChild(monitorBtnTag);
+    monitorBtnsDiv.appendChild(monitorBtnDiv);
+  });
+};
+
+const removeDisplayBtnHtml = () => {
+  const monitorsBtnDiv = document.getElementsByClassName("monitors-btn-div");
+  console.log(monitorsBtnDiv);
+  for (let item of monitorsBtnDiv) {
+    while (item.firstChild) {
+      item.removeChild(item.firstChild);
+    }
+  }
+};
+
+// const parentDiv = document.getElementById("specialties-parent-div");
+//   while (parentDiv.firstChild) {
+//     parentDiv.removeChild(parentDiv.firstChild);
+//   }
 
 const resetDisplayBtn = () => {
   const displayBtnDiv = document.getElementsByClassName(
