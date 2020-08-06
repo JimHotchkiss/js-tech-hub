@@ -53,7 +53,7 @@ const formEventListener = () => {
   const formLink = document.getElementById("form-link");
   formLink.addEventListener("click", () => {
     window.open(
-      "https://forms.office.com/Pages/ResponsePage.aspx?id=-7udTko5g0WIEFP4H4GeOyvF9t6kmYZAnEVeps1nibRUQThHUjlOV1FOSEVOMlJXWEtaVE1TVTc5WS4u"
+      "https://forms.office.com/Pages/ResponsePage.aspx?id=-7udTko5g0WIEFP4H4GeOyvF9t6kmYZAnEVeps1nibRUN1VTTEZYNjZKNDRSWTJXUE00U05NTktIQi4u"
     );
   });
 };
@@ -117,6 +117,7 @@ const selectCCu = (currentCcu) => {
     changeInfoText();
   } else if (state.camera.name !== "") {
     console.log("6");
+    removeDisplayBtnHtml();
     setCcuState(currentCcu);
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
