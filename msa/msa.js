@@ -287,7 +287,9 @@ const displayEventListener = () => {
         console.log("state display === current display");
         resetDisplayState();
         resetDisplayBtn();
-        // reasignDisplayBtn();
+        changeInfoText();
+        hideSpecialties();
+        removeSpecialtyHtmlElements();
       } else {
         console.log("current display", currentDisplay);
         setDisplayState(currentDisplay);
