@@ -37,6 +37,8 @@ const displays = {
 };
 
 const monitorBtnDivs = document.getElementsByClassName("monitor-btn-div");
+const url =
+  "https://forms.office.com/Pages/ResponsePage.aspx?id=-7udTko5g0WIEFP4H4GeOyvF9t6kmYZAnEVeps1nibRUN1VTTEZYNjZKNDRSWTJXUE00U05NTktIQi4u";
 
 const ccuEventListener = () => {
   camerasDiv = document.getElementsByClassName("camera-div");
@@ -52,9 +54,7 @@ const ccuEventListener = () => {
 const formEventListener = () => {
   const formLink = document.getElementById("form-link");
   formLink.addEventListener("click", () => {
-    window.open(
-      "https://forms.office.com/Pages/ResponsePage.aspx?id=-7udTko5g0WIEFP4H4GeOyvF9t6kmYZAnEVeps1nibRUN1VTTEZYNjZKNDRSWTJXUE00U05NTktIQi4u"
-    );
+    window.open(url);
   });
 };
 
@@ -75,6 +75,7 @@ const selectCCu = (currentCcu) => {
     // resetCCuState()
   } else if (state.camera.name === currentCcu && state.display.name !== "") {
     console.log("2");
+    removeDisplayBtnHtml();
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
     resetCcuState();
@@ -83,7 +84,6 @@ const selectCCu = (currentCcu) => {
     changeInfoText();
     hideSpecialties();
     removeSpecialtyHtmlElements();
-    removeDisplayBtnHtml();
   } else if (state.camera.name === currentCcu) {
     console.log("3");
     closeDisplayDiv(cameraDisplayDiv);
@@ -108,13 +108,15 @@ const selectCCu = (currentCcu) => {
     rotateArrow();
   } else if (state.camera.name !== "" && state.display.name !== "") {
     console.log("5");
+    removeDisplayBtnHtml();
     setCcuState(currentCcu);
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
     rotateOpenArrow();
-    reasignDisplayBtn();
+
     openMonitorsDiv(currentCcu);
-    changeInfoText();
+    // changeInfoText();
+    reasignDisplayBtn();
   } else if (state.camera.name !== "") {
     console.log("6");
     removeDisplayBtnHtml();
@@ -171,13 +173,19 @@ const changeInfoText = () => {
 const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
+      console.log(event.currentTarget.dataset.display);
       const currentDisplay = event.currentTarget.dataset.display;
       if (state.display.name === currentDisplay) {
+        console.log("state display === current display");
         resetDisplayState();
         resetDisplayBtn();
+        // reasignDisplayBtn();
       } else {
+        console.log("current display", currentDisplay);
         setDisplayState(currentDisplay);
+        resetDisplayBtn();
         reasignDisplayBtn();
+
         changeInfoText();
         listSpecialties();
       }
@@ -199,7 +207,6 @@ const listSpecialties = () => {
   const specialtiesParentDiv = document.getElementById(
     "specialties-parent-div"
   );
-
   SPECIALTIES.map((specialty) => {
     const specialityBtnDiv = document.createElement("div");
     specialityBtnDiv.setAttribute("class", "specialty-btn-div");
@@ -246,6 +253,7 @@ const resetCcuState = () => {
 };
 
 const setDisplayState = (currentDisplay) => {
+  console.log("set display state", currentDisplay);
   state.display.name = currentDisplay;
   state.display.clicked = true;
 };
@@ -289,18 +297,15 @@ const assignCurrentDisplays = (currentCcu) => {
 };
 
 const showCurrentDisplays = (currentDisplays, currentCcu) => {
-  console.log(currentDisplays);
+  console.log(currentDisplays, "displays for choosen ccus");
   const monitorBtnsDiv = document.getElementById(
     currentCcu + "-monitors-btns-div"
   );
   currentDisplays.map((display) => {
     const monitorBtnDiv = document.createElement("div");
-    monitorBtnDiv.setAttribute(
-      "id",
-      currentCcu + "-" + display.getElementsByClassName
-    );
+    monitorBtnDiv.setAttribute("id", currentCcu + "-" + display.name);
     monitorBtnDiv.setAttribute("class", "monitor-btn-div");
-    monitorBtnDiv.setAttribute("data-monitor", display.name);
+    monitorBtnDiv.setAttribute("data-display", display.name);
     const monitorBtnTag = document.createElement("p");
     monitorBtnTag.setAttribute("class", "monitor-btn-tag");
     monitorBtnTag.innerHTML = display.name;
@@ -311,7 +316,7 @@ const showCurrentDisplays = (currentDisplays, currentCcu) => {
 
 const removeDisplayBtnHtml = () => {
   const monitorsBtnDiv = document.getElementsByClassName("monitors-btn-div");
-  console.log(monitorsBtnDiv);
+  console.log("remove diplay btn html");
   for (let item of monitorsBtnDiv) {
     while (item.firstChild) {
       item.removeChild(item.firstChild);
@@ -319,12 +324,8 @@ const removeDisplayBtnHtml = () => {
   }
 };
 
-// const parentDiv = document.getElementById("specialties-parent-div");
-//   while (parentDiv.firstChild) {
-//     parentDiv.removeChild(parentDiv.firstChild);
-//   }
-
 const resetDisplayBtn = () => {
+  console.log("reset display btn");
   const displayBtnDiv = document.getElementsByClassName(
     "monitor-btn-div-active"
   );
@@ -334,10 +335,16 @@ const resetDisplayBtn = () => {
 };
 
 const reasignDisplayBtn = () => {
-  resetDisplayBtn();
+  console.log(
+    "reasign display btn",
+    state.display,
+    state.camera.name + "-" + state.display.name
+  );
+  // resetDisplayBtn();
   const displayBtnDiv = document.getElementById(
     state.camera.name + "-" + state.display.name
   );
+  console.log(displayBtnDiv);
   if (displayBtnDiv !== null) {
     displayBtnDiv.className = "monitor-btn-div-active";
   } else {
