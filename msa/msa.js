@@ -12,24 +12,132 @@ const state = {
 };
 
 // Specialties
-const SPECIALTIES = [
-  "Multi",
-  "Arthro 1",
-  "Arthro 2",
-  "Arthro 4/16",
-  "Lap 1",
-  "Lap 2",
-  "Lap Storz",
-  "Cysto",
-  "Hysteroscopy",
-  "Flexiscope",
-  "ENT",
-  "Laser",
-  "Microscope",
-  "Standard",
-  "Vein Harvest",
-  "Olympus GI",
-];
+const SPECIALTIES = {
+  "1688-4k": [
+    { name: "1688 4k" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+  ],
+  "1688-Vision Pro": [
+    { name: "1688 VP" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "1588-4k": [
+    { name: "1588 4k" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap Storz" },
+  ],
+  "1588-Vision Pro": [
+    { name: "1588 VP" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "1588-Vision Elect": [
+    { name: "1588 VE" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+  ],
+  "1488-4k": [
+    { name: "1488 4k" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "1488-Vision Pro": [
+    { name: "1488 VP" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+  ],
+  "1488-Vision Elect": [
+    { name: "1488 VE" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "precision-4k": [
+    { name: "Prec 4k" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "precision-Vision Pro": [
+    { name: "Prec VP" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "precision-Vision Elect": [
+    { name: "Prec VE" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "1288-4k": [
+    { name: "1288 4k" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "1288-Vision Pro": [
+    { name: "1288 VP" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+  "1288-Vision Elect": [
+    { name: "1288 VE" },
+    { name: "Arthro 1" },
+    { name: "Arthro 2" },
+    { name: "Arthro 4/16" },
+    { name: "Lap 1" },
+    { name: "Lap 2" },
+    { name: "Lap 3" },
+  ],
+};
 
 const displays = {
   sixteen: [{ name: "4k" }, { name: "Vision Pro" }],
@@ -113,7 +221,7 @@ const selectCCu = (currentCcu) => {
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
     rotateOpenArrow();
-
+    listSpecialties();
     openMonitorsDiv(currentCcu);
     // changeInfoText();
     reasignDisplayBtn();
@@ -185,7 +293,6 @@ const displayEventListener = () => {
         setDisplayState(currentDisplay);
         resetDisplayBtn();
         reasignDisplayBtn();
-
         changeInfoText();
         listSpecialties();
       }
@@ -203,17 +310,22 @@ const specialtiesEventListener = () => {
 };
 
 const listSpecialties = () => {
+  removeSpecialtyHtmlElements();
   showSpecialties();
+  console.log(state.camera, state.display);
   const specialtiesParentDiv = document.getElementById(
     "specialties-parent-div"
   );
-  SPECIALTIES.map((specialty) => {
+  let specialtiesList = state.camera.name + "-" + state.display.name;
+
+  console.log(specialtiesList);
+  SPECIALTIES[specialtiesList].map((specialty) => {
     const specialityBtnDiv = document.createElement("div");
     specialityBtnDiv.setAttribute("class", "specialty-btn-div");
-    specialityBtnDiv.setAttribute("data-specialty", specialty);
+    specialityBtnDiv.setAttribute("data-specialty", specialty.name);
     const specialityBtnTag = document.createElement("p");
     specialityBtnTag.setAttribute("class", "specialty-btn-tag");
-    specialityBtnTag.innerHTML = specialty;
+    specialityBtnTag.innerHTML = specialty.name;
     specialityBtnDiv.appendChild(specialityBtnTag);
     specialtiesParentDiv.appendChild(specialityBtnDiv);
   });
@@ -325,7 +437,6 @@ const removeDisplayBtnHtml = () => {
 };
 
 const resetDisplayBtn = () => {
-  console.log("reset display btn");
   const displayBtnDiv = document.getElementsByClassName(
     "monitor-btn-div-active"
   );
@@ -335,12 +446,6 @@ const resetDisplayBtn = () => {
 };
 
 const reasignDisplayBtn = () => {
-  console.log(
-    "reasign display btn",
-    state.display,
-    state.camera.name + "-" + state.display.name
-  );
-  // resetDisplayBtn();
   const displayBtnDiv = document.getElementById(
     state.camera.name + "-" + state.display.name
   );
