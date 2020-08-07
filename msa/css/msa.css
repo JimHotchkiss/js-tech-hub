@@ -335,20 +335,6 @@ html {
   background: lightsalmon;
 }
 
-.settings-container {
-  height: 500px;
-  max-width: 1000px;
-  /* width: 1200px; */
-  /* background: lightskyblue; */
-}
-
-.settings-container-show {
-  height: 500px;
-  max-width: 1000px;
-  /* width: 1200px; */
-  background: lightskyblue;
-}
-
 #specialties-div {
   display: none;
 }
@@ -357,7 +343,7 @@ html {
   display: flex;
 
   margin-left: 30px;
-  margin-top: 30px;
+  margin-top: 20px;
   max-width: 1200px;
 }
 
@@ -366,6 +352,11 @@ html {
   flex-wrap: wrap;
   max-width: 1200px;
   margin-left: 14px;
+  margin-top: 8px;
+}
+
+.specialty-title-div {
+  margin-top: 16px;
 }
 
 .specialty-title-tag {
@@ -376,7 +367,6 @@ html {
   letter-spacing: 0px;
   color: #000000;
   opacity: 0.7;
-  margin-top: 6px;
 }
 
 .specialty-btn-tag {
@@ -432,4 +422,79 @@ html {
 
 .specialty-btn-tag:hover {
   color: #fff;
+}
+
+.settings-container {
+  display: none;
+  height: 500px;
+  max-width: 1000px;
+  /* width: 1200px; */
+  /* background: lightskyblue; */
+}
+
+.settings-container-show {
+  display: flex;
+  flex-direction: column;
+  height: 620px;
+  max-width: 100%;
+  margin-top: 10px;
+  background: lightskyblue;
+}
+
+.settings-title-container {
+  display: flex;
+}
+
+.settings-title-camera {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  background: #eaeef2;
+  border-right: 1px dashed #b3b0b0;
+}
+
+.settings-title-camera p {
+  text-align: left;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 0.7;
+}
+
+.settings-title-display {
+  display: flex;
+  width: 100%;
+  height: 60px;
+  background: #eaeef2;
+}
+
+.settings-title-display p {
+  text-align: left;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 0.7;
+}
+
+.settings-body-container {
+  display: flex;
+  height: 400px;
+  max-width: 1000px;
+  background: lightyellow;
+}
+
+.settings-div-camera {
+  width: 300px;
+  height: 400px;
+  background: lightseagreen;
+}
+
+.settings-div-display {
+  width: 300px;
+  height: 400px;
+  background: lightsteelblue;
 }
