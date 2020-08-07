@@ -150,10 +150,10 @@ const url =
 
 const ccuEventListener = () => {
   camerasDiv = document.getElementsByClassName("camera-div");
-  // add event listener
   for (let item of camerasDiv) {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
+      console.log(state);
       selectCCu(currentCcu);
     });
   }
@@ -168,7 +168,17 @@ const formEventListener = () => {
 
 const selectCCu = (currentCcu) => {
   const cameraDisplayDiv = state.camera.name;
-  if (
+  console.log(state);
+  if (currentCcu === "1688" && state.display.name === "Vision Elect") {
+    console.log("1688 and VE");
+    resetDisplayState();
+    closeDisplayDiv(cameraDisplayDiv);
+    hideSpecialties();
+    setCcuState(currentCcu);
+    openMonitorsDiv(currentCcu);
+    rotateOpenArrow();
+    changeInfoText();
+  } else if (
     state.camera.name === currentCcu &&
     state.display.name !== "" &&
     state.specialty.name !== ""
@@ -255,6 +265,7 @@ const rotateCloseArrow = () => {
 };
 
 const changeInfoText = () => {
+  console.log(state.camera, state.display);
   const infoTag = document.getElementById("info-tag-text");
   if (
     state.camera.name !== "" &&
@@ -281,7 +292,7 @@ const changeInfoText = () => {
 const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
-      console.log(event.currentTarget.dataset.display);
+      console.log("display event listener");
       const currentDisplay = event.currentTarget.dataset.display;
       if (state.display.name === currentDisplay) {
         console.log("state display === current display");
@@ -318,21 +329,36 @@ const listSpecialties = () => {
   const specialtiesParentDiv = document.getElementById(
     "specialties-parent-div"
   );
-  let specialtiesList = state.camera.name + "-" + state.display.name;
 
-  console.log(specialtiesList);
-  SPECIALTIES[specialtiesList].map((specialty) => {
-    const specialityBtnDiv = document.createElement("div");
-    specialityBtnDiv.setAttribute("class", "specialty-btn-div");
-    specialityBtnDiv.setAttribute("data-specialty", specialty.name);
-    const specialityBtnTag = document.createElement("p");
-    specialityBtnTag.setAttribute("class", "specialty-btn-tag");
-    specialityBtnTag.innerHTML = specialty.name;
-    specialityBtnDiv.appendChild(specialityBtnTag);
-    specialtiesParentDiv.appendChild(specialityBtnDiv);
-  });
+  const cameraDisplayDiv = state.camera.name;
+  if (state.camera.name === "1688" && state.display.name === "Vision Elect") {
+    console.log("list specialites");
+    // removeDisplayBtnHtml();
+    // setCcuState(currentCcu);
+    // closeDisplayDiv(cameraDisplayDiv);
+    // rotateCloseArrow();
+    // rotateOpenArrow();
+    // openMonitorsDiv(cameraDisplayDiv);
+    hideSpecialties();
+    removeSpecialtyHtmlElements();
+    changeInfoText();
+  } else {
+    let specialtiesList = state.camera.name + "-" + state.display.name;
 
-  specialtiesEventListener();
+    console.log(specialtiesList);
+    SPECIALTIES[specialtiesList].map((specialty) => {
+      const specialityBtnDiv = document.createElement("div");
+      specialityBtnDiv.setAttribute("class", "specialty-btn-div");
+      specialityBtnDiv.setAttribute("data-specialty", specialty.name);
+      const specialityBtnTag = document.createElement("p");
+      specialityBtnTag.setAttribute("class", "specialty-btn-tag");
+      specialityBtnTag.innerHTML = specialty.name;
+      specialityBtnDiv.appendChild(specialityBtnTag);
+      specialtiesParentDiv.appendChild(specialityBtnDiv);
+    });
+
+    specialtiesEventListener();
+  }
 };
 
 const showSpecialties = () => {
@@ -372,6 +398,7 @@ const setDisplayState = (currentDisplay) => {
   state.display.clicked = true;
 };
 const resetDisplayState = () => {
+  console.log("reset display state");
   state.display.name = "";
   state.display.clicked = false;
 };
@@ -451,7 +478,6 @@ const reasignDisplayBtn = () => {
   const displayBtnDiv = document.getElementById(
     state.camera.name + "-" + state.display.name
   );
-  console.log(displayBtnDiv);
   if (displayBtnDiv !== null) {
     displayBtnDiv.className = "monitor-btn-div-active";
   } else {
