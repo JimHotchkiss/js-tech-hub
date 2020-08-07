@@ -2,7 +2,7 @@ window.onload = function loadCcus() {
   ccuEventListener();
   displayEventListener();
   formEventListener();
-  // specialtiesEventListener();
+  specialtiesEventListener();
 };
 
 const state = {
@@ -184,13 +184,16 @@ const selectCCu = (currentCcu) => {
     state.specialty.name !== ""
   ) {
     console.log("1");
+    hideSpecialties();
+    removeSpecialtyHtmlElements();
+    resetSpecialtyState();
     closeDisplayDiv(cameraDisplayDiv);
+    removeDisplayBtnHtml();
+    resetDisplayBtn();
+    resetDisplayState();
     rotateCloseArrow();
-    // resetSpecialtyState()
-    // closeSpecialtyDiv()
-    // resetDisplayState()
-    // resetDisplayBtn()
-    // resetCCuState()
+    resetCcuState();
+    changeInfoText();
   } else if (state.camera.name === currentCcu && state.display.name !== "") {
     console.log("2");
     removeDisplayBtnHtml();
@@ -223,7 +226,7 @@ const selectCCu = (currentCcu) => {
     // closeSpecialtyDiv()
     reasignDisplayBtn();
     openMonitorsDiv(currentCcu);
-    rotateArrow();
+    rotateCloseArrow();
   } else if (state.camera.name !== "" && state.display.name !== "") {
     console.log("5");
     removeDisplayBtnHtml();
@@ -233,10 +236,9 @@ const selectCCu = (currentCcu) => {
     rotateOpenArrow();
     listSpecialties();
     openMonitorsDiv(currentCcu);
-    // changeInfoText();
     reasignDisplayBtn();
   } else if (state.camera.name !== "") {
-    console.log("6");
+    console.log("6", state);
     removeDisplayBtnHtml();
     setCcuState(currentCcu);
     closeDisplayDiv(cameraDisplayDiv);
@@ -317,9 +319,30 @@ const specialtiesEventListener = () => {
   const specialityBtnDiv = document.getElementsByClassName("specialty-btn-div");
   for (let item of specialityBtnDiv) {
     item.addEventListener("click", () => {
-      alert(event.currentTarget);
+      const currentSpecialty = event.currentTarget.dataset.specialty;
+      console.log(event.currentTarget.dataset.specialty);
+      console.log(event.currentTarget.id);
+      setSpecialtyState(currentSpecialty);
+      setSpecialtyBtn();
+      hideInfo();
+      showSettingsContainer();
     });
   }
+};
+
+const showSettingsContainer = () => {
+  const settingsContainer = document.getElementById("settings-container-id");
+  settingsContainer.className = "settings-container-show";
+};
+
+const setSpecialtyBtn = () => {
+  const specialtyBtn = document.getElementById(state.specialty.name);
+  specialtyBtn.className = "specialty-btn-div-active";
+};
+
+const hideInfo = () => {
+  const infoDiv = document.getElementById("info-div-id");
+  infoDiv.className = "info-div-hide";
 };
 
 const listSpecialties = () => {
@@ -350,6 +373,7 @@ const listSpecialties = () => {
       const specialityBtnDiv = document.createElement("div");
       specialityBtnDiv.setAttribute("class", "specialty-btn-div");
       specialityBtnDiv.setAttribute("data-specialty", specialty.name);
+      specialityBtnDiv.setAttribute("id", specialty.name);
       const specialityBtnTag = document.createElement("p");
       specialityBtnTag.setAttribute("class", "specialty-btn-tag");
       specialityBtnTag.innerHTML = specialty.name;
@@ -403,7 +427,8 @@ const resetDisplayState = () => {
   state.display.clicked = false;
 };
 
-const setSpecialtyState = () => {
+const setSpecialtyState = (currentSpecialty) => {
+  console.log(currentSpecialty);
   state.specialty.name = currentSpecialty;
   state.specialty.clicked = true;
 };
