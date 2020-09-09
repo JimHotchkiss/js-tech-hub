@@ -453,6 +453,60 @@ html {
   border-right: 1px dashed #b3b0b0;
 }
 
+.settings-title-camera-text-div {
+  width: 50%;
+}
+
+.settings-title-camera-text-div #settings-title-camera-tag {
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  padding-top: 28px;
+  padding-left: 30px;
+}
+
+.settings-title-specialty-text-div #settings-title-specialty-tag {
+  font-family: Roboto;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  padding-top: 28px;
+  padding-left: 2px;
+}
+
+.settings-title-display-text-div #settings-title-display-tag {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  padding-top: 28px;
+  padding-left: 30px;
+}
+
+.settings-title-specialty-text-div #settings-title-display-specialty-tag {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  padding-top: 28px;
+  padding-left: 2px;
+}
+
+.settings-title-specialty-text-div {
+  width: 50%;
+}
+
+.settings-title-display-text-div {
+  width: 50%;
+}
+
 .settings-title-camera p {
   text-align: left;
   font-family: Roboto;
@@ -483,7 +537,7 @@ html {
 .settings-body-container {
   display: flex;
   height: 400px;
-  max-width: 1000px;
+  max-width: 1200px;
   background: lightyellow;
 }
 
