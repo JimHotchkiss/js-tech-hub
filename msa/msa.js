@@ -320,29 +320,40 @@ const specialtiesEventListener = () => {
   for (let item of specialityBtnDiv) {
     item.addEventListener("click", () => {
       const currentSpecialty = event.currentTarget.dataset.specialty;
-      console.log(event.currentTarget.dataset.specialty);
-      console.log(event.currentTarget.id);
-      setSpecialtyState(currentSpecialty);
-      setSpecialtyBtn();
-      hideInfo();
-      showSettingsContainer();
+      console.log(state.specialty, currentSpecialty);
+      if (state.specialty.name === currentSpecialty) {
+        resetSpecialtyState();
+        clearSettingsHtml();
+      } else {
+        setSpecialtyState(currentSpecialty);
+        setSpecialtyBtn();
+        hideInfo();
+        showSettingsContainer();
+      }
     });
+  }
+};
+
+const clearSettingsHtml = () => {
+  const parentDiv = document.getElementById("settings-container-id");
+  while (parentDiv.firstChild) {
+    parentDiv.removeChild(parentDiv.firstChild);
   }
 };
 
 const showSettingsContainer = () => {
   const settingsContainer = document.getElementById("settings-container-id");
   settingsContainer.classList.toggle("show");
-  showSettingsBodyContainer();
+  // showSettingsBodyContainer();
   populateSettings(settingsContainer);
 };
 
-const showSettingsBodyContainer = () => {
-  const settingsContainer = document.getElementById(
-    "settings-body-container-id"
-  );
-  settingsContainer.classList.toggle("show");
-};
+// const showSettingsBodyContainer = () => {
+//   const settingsContainer = document.getElementById(
+//     "settings-body-container-id"
+//   );
+//   settingsContainer.classList.toggle("show");
+// };
 
 const populateSettings = (settingsContainer) => {
   // settings-title-container
@@ -409,6 +420,25 @@ const populateSettings = (settingsContainer) => {
   settingsTitleDisplay.appendChild(settingsTitleDisplayTextDiv);
   // settings-title-display goes inside settings-container-id
   settingsContainer.appendChild(settingsTitleDisplay);
+
+  //////////////////////////// Check out this /////////////////////////
+  //settings-title-specialty-text-div goes in settings-title-display
+  const settingsTitleSpecialtyTextDiv2 = document.createElement("div");
+  settingsTitleSpecialtyTextDiv2.setAttribute(
+    "class",
+    "settings-title-specialty-text-div"
+  );
+
+  const settingsTitleSpecialtyTag2 = document.createElement("p");
+  settingsTitleSpecialtyTag2.setAttribute(
+    "id",
+    "settings-title-display-specialty-tag"
+  );
+  // settings-title-specialty-tag goes into settings-title-specialty-text-div
+  settingsTitleSpecialtyTag2.innerText = "SPECIALTY";
+  settingsTitleSpecialtyTextDiv2.appendChild(settingsTitleSpecialtyTag2);
+  //settings-title-specialty-text-div goes in settings-title-display
+  settingsTitleDisplay.appendChild(settingsTitleSpecialtyTextDiv2);
 };
 
 const setSpecialtyBtn = () => {
