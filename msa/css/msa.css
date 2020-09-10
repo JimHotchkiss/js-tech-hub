@@ -455,7 +455,19 @@ html {
 }
 
 .settings-title-camera-text-div {
+  display: flex;
   width: 50%;
+}
+
+.settings-title-camera-text-div #camera-tag-text {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  color: #707070;
+  opacity: 1;
+  padding-top: 32px;
+  padding-left: 10px;
 }
 
 .settings-title-camera-text-div #settings-title-camera-tag {
