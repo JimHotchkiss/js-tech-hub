@@ -400,10 +400,10 @@ const populateSettings = (settingsContainer) => {
   // settings-title-container goes insdie settings-container
   settingsContainer.appendChild(settingsTitleContainer);
 
-  // Settings-title-display goes inside settings-container-id
+  // Settings-title-display goes inside settings-title-container
   const settingsTitleDisplay = document.createElement("div");
   settingsTitleDisplay.setAttribute("class", "settings-title-display");
-  // settings-title-display-text-div goes into settings-title-display
+  // // settings-title-display-text-div goes into settings-title-display
   const settingsTitleDisplayTextDiv = document.createElement("div");
   settingsTitleDisplayTextDiv.setAttribute(
     "class",
@@ -412,33 +412,50 @@ const populateSettings = (settingsContainer) => {
   // #settings-title-display-tag goes inside settings-title-display-text-div
   const settingsTitleDisplayTag = document.createElement("p");
   settingsTitleDisplayTag.setAttribute("id", "settings-title-display-tag");
-  // settings-title-specialty-text-div goes into settings-title-display
   settingsTitleDisplayTag.innerText = "DISPLAY";
   // settings-title-display-tag goes into settings-title-display-text-div
   settingsTitleDisplayTextDiv.appendChild(settingsTitleDisplayTag);
   // settings-title-display-text-div goes into settings-title-display
   settingsTitleDisplay.appendChild(settingsTitleDisplayTextDiv);
   // settings-title-display goes inside settings-container-id
-  settingsContainer.appendChild(settingsTitleDisplay);
 
   //////////////////////////// Check out this /////////////////////////
-  //settings-title-specialty-text-div goes in settings-title-display
-  const settingsTitleSpecialtyTextDiv2 = document.createElement("div");
-  settingsTitleSpecialtyTextDiv2.setAttribute(
+  // settings-title-display-specialty-text-div goes inside settings-title-display
+  const settingsTitleDisplaySpecialtyTextDiv = document.createElement("div");
+  settingsTitleDisplaySpecialtyTextDiv.setAttribute(
     "class",
-    "settings-title-specialty-text-div"
+    "settings-title-display-specialty-text-div"
   );
-
-  const settingsTitleSpecialtyTag2 = document.createElement("p");
-  settingsTitleSpecialtyTag2.setAttribute(
+  // settings-title-display-specialty-tag goes inside settings-title-display-specialty-text-div
+  const settingsTitleDisplaySpecialtyTag = document.createElement("p");
+  settingsTitleDisplaySpecialtyTag.setAttribute(
     "id",
     "settings-title-display-specialty-tag"
   );
-  // settings-title-specialty-tag goes into settings-title-specialty-text-div
-  settingsTitleSpecialtyTag2.innerText = "SPECIALTY";
-  settingsTitleSpecialtyTextDiv2.appendChild(settingsTitleSpecialtyTag2);
+  settingsTitleDisplaySpecialtyTag.innerText = "SPECIALTY";
+  settingsTitleDisplaySpecialtyTextDiv.appendChild(
+    settingsTitleDisplaySpecialtyTag
+  );
+  settingsTitleDisplay.appendChild(settingsTitleDisplaySpecialtyTextDiv);
+  settingsContainer.appendChild(settingsTitleDisplay);
+
   //settings-title-specialty-text-div goes in settings-title-display
-  settingsTitleDisplay.appendChild(settingsTitleSpecialtyTextDiv2);
+  // const settingsTitleSpecialtyTextDiv2 = document.createElement("div");
+  // settingsTitleSpecialtyTextDiv2.setAttribute(
+  //   "class",
+  //   "settings-title-specialty-text-div"
+  // );
+
+  // const settingsTitleSpecialtyTag2 = document.createElement("p");
+  // settingsTitleSpecialtyTag2.setAttribute(
+  //   "id",
+  //   "settings-title-display-specialty-tag"
+  // );
+  // settings-title-specialty-tag goes into settings-title-specialty-text-div
+  // settingsTitleSpecialtyTag2.innerText = "SPECIALTY";
+  // settingsTitleSpecialtyTextDiv2.appendChild(settingsTitleSpecialtyTag2);
+  //settings-title-specialty-text-div goes in settings-title-display
+  // settingsTitleDisplay.appendChild(settingsTitleSpecialtyTextDiv2);
 };
 
 const setSpecialtyBtn = () => {

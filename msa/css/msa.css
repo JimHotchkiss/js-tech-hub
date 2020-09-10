@@ -490,7 +490,8 @@ html {
   padding-left: 30px;
 }
 
-.settings-title-specialty-text-div #settings-title-display-specialty-tag {
+.settings-title-display-specialty-text-div
+  #settings-title-display-specialty-tag {
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 0px;
