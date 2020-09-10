@@ -355,7 +355,33 @@ const showSettingsContainer = () => {
 //   settingsContainer.classList.toggle("show");
 // };
 
+const fetchSettings = () => {
+  fetch("./settings.json")
+    .then((response) => response.json())
+    .then((data) => filterCcu(data));
+};
+
+const filterCcu = (data) => {
+  data.ccus.map((ccu) => {
+    if (ccu[state.camera.name]) {
+      ccu[state.camera.name]["monitors"].map((monitor) => {
+        if (monitor[state.display.name]) {
+          monitor[state.display.name]["specialties"].map((specialty) => {
+            if (specialty[state.specialty.name]) {
+              specialty[state.specialty.name].map((setting) => {
+                console.log(setting);
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
 const populateSettings = (settingsContainer) => {
+  console.log(state);
+  fetchSettings();
   // settings-title-container
   const settingsTitleContainer = document.createElement("div");
   settingsTitleContainer.setAttribute("class", "settings-title-container");
