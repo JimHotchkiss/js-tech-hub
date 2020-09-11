@@ -201,7 +201,7 @@ html {
   opacity: 1;
 }
 
-.monitors-div-active {
+.monitors-div.active {
   max-height: 1000px;
   height: auto;
   transition: all 0.3s ease-out;

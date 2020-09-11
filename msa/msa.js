@@ -5,12 +5,12 @@ window.onload = function loadCcus() {
   specialtiesEventListener();
 };
 
-const state = {
-  camera: { name: "", clicked: false },
-  display: { name: "", clicked: false },
-  specialty: { name: "", clicked: false },
-  cameraSettings: [],
-};
+// const state = {
+//   camera: { name: "", clicked: false },
+//   display: { name: "", clicked: false },
+//   specialty: { name: "", clicked: false },
+//   cameraSettings: [],
+// };
 
 const App = function _App() {
   return `
@@ -33,6 +33,7 @@ App.state = {
     App.state.ccu = input;
   },
   changeDisplay: (input) => {
+    console.log(input);
     App.state.display = input;
   },
   changeSpecialty: (input) => {
@@ -186,7 +187,12 @@ const ccuEventListener = () => {
   for (let item of camerasDiv) {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
-      App.state.changeCcu(currentCcu);
+      console.log(currentCcu, App.state.ccu);
+      if (currentCcu === App.state.ccu) {
+        App.state.changeCcu("");
+      } else {
+        App.state.changeCcu(currentCcu);
+      }
       selectCCu(currentCcu);
     });
   }
@@ -199,26 +205,24 @@ const formEventListener = () => {
   });
 };
 
-const selectCCu = (currentCcu) => {
+const selectCCu = () => {
   const cameraDisplayDiv = App.state.ccu;
-  if (currentCcu === "1688" && App.state.ccu === "Vision Elect") {
-    console.log("1688 and VE");
-    resetDisplayState();
+  if (App.state.ccu === "1688" && App.state.display === "Vision Elect") {
+    App.state.changeDisplay("");
     closeDisplayDiv(cameraDisplayDiv);
-    hideSpecialties();
-    setCcuState(currentCcu);
-    openMonitorsDiv(currentCcu);
-    rotateOpenArrow();
-    changeInfoText();
+    openDisplayDiv();
+    rotateCloseArrow();
+    resetDisplayBtn();
+    console.log("1688 VE");
   } else if (
-    App.state.ccu === currentCcu &&
+    App.state.ccu === "" &&
     App.state.display !== "" &&
     App.state.specialty !== ""
   ) {
     console.log("setting display, close ccu");
     hideSpecialties();
     removeSpecialtyHtmlElements();
-    resetSpecialtyState();
+    App.state.specialty("");
     closeDisplayDiv(cameraDisplayDiv);
     removeDisplayBtnHtml();
     resetDisplayBtn();
@@ -226,55 +230,26 @@ const selectCCu = (currentCcu) => {
     rotateCloseArrow();
     App.state.changeCcu("");
     changeInfoText();
-  } else if (App.state.ccu === currentCcu && App.state.display !== "") {
-    removeDisplayBtnHtml();
+  } else if (App.state.ccu !== "" && App.state.display !== "") {
+    console.log("ccu selected and display");
     closeDisplayDiv(cameraDisplayDiv);
+    removeDisplayBtnHtml();
+    reasignDisplayBtn();
     rotateCloseArrow();
-    resetCcuState();
-    resetDisplayBtn();
-    resetDisplayState();
+    rotateOpenArrow();
     changeInfoText();
-    hideSpecialties();
-    removeSpecialtyHtmlElements();
-  } else if (state.camera.name === currentCcu) {
-    console.log("close 1688");
+    openDisplayDiv(cameraDisplayDiv);
+  } else if (App.state.ccu !== "") {
+    console.log("close ccu", App.state.ccu);
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
     App.state.changeCcu("");
     changeInfoText();
     hideSpecialties();
     removeDisplayBtnHtml();
-  } else if (
-    App.state.ccu !== "" &&
-    App.state.display !== "" &&
-    App.state.specialty !== ""
-  ) {
-    setCcuState(currentCcu);
-    closeDisplayDiv(cameraDisplayDiv);
-    rotateCloseArrow();
-    reasignDisplayBtn();
-    openMonitorsDiv(currentCcu);
-    rotateCloseArrow();
-  } else if (state.camera.name !== "" && state.display.name !== "") {
-    removeDisplayBtnHtml();
-    setCcuState(currentCcu);
-    closeDisplayDiv(cameraDisplayDiv);
-    rotateCloseArrow();
-    rotateOpenArrow();
-    listSpecialties();
-    openMonitorsDiv(currentCcu);
-    reasignDisplayBtn();
-  } else if (state.camera.name !== "") {
-    removeDisplayBtnHtml();
-    setCcuState(currentCcu);
-    closeDisplayDiv(cameraDisplayDiv);
-    rotateCloseArrow();
-    rotateOpenArrow();
-    openMonitorsDiv(currentCcu);
-    changeInfoText();
   } else {
-    App.state.changeCcu(currentCcu);
-    openMonitorsDiv(currentCcu);
+    console.log("first selection");
+    openDisplayDiv();
     rotateOpenArrow();
     changeInfoText();
   }
@@ -293,20 +268,21 @@ const rotateCloseArrow = () => {
 };
 
 const changeInfoText = () => {
+  console.log(App.state.ccu);
   const infoTag = document.getElementById("info-tag-text");
   if (
-    state.camera.name !== "" &&
-    (state.display.name !== "") & (state.specialty.name !== "")
+    App.state.ccu !== "" &&
+    (App.state.display !== "") & (App.state.specialty !== "")
   ) {
     infoTag.innerText = "Select Specialty to populate settings...";
   } else if (
-    state.camera.name !== "" &&
-    (state.display.name !== "") & (state.specialty.name === "")
+    App.state.ccu !== "" &&
+    (App.state.display !== "") & (App.state.specialty === "")
   ) {
     infoTag.innerText = "Select Specialty to populate settings...";
   } else if (
-    state.camera.name !== "" &&
-    (state.display.name === "") & (state.specialty.name === "")
+    App.state.ccu !== "" &&
+    (App.state.display === "") & (App.state.specialty === "")
   ) {
     infoTag.innerText =
       "Select a Display and a Specialy to populate settings...";
@@ -319,16 +295,17 @@ const changeInfoText = () => {
 const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
-      console.log(event.currentTarget.dataset.display);
       const currentDisplay = event.currentTarget.dataset.display;
-      if (state.display.name === currentDisplay) {
-        resetDisplayState();
+      if (App.state.display === currentDisplay) {
+        console.log("same display selected");
+        App.state.changeDisplay("");
         resetDisplayBtn();
         changeInfoText();
         hideSpecialties();
         removeSpecialtyHtmlElements();
       } else {
-        setDisplayState(currentDisplay);
+        console.log("display selected", currentDisplay);
+        App.state.changeDisplay(currentDisplay);
         resetDisplayBtn();
         reasignDisplayBtn();
         changeInfoText();
@@ -505,7 +482,8 @@ const listSpecialties = () => {
   const specialtiesParentDiv = document.getElementById(
     "specialties-parent-div"
   );
-  let specialtiesList = state.camera.name + "-" + state.display.name;
+  let specialtiesList = App.state.ccu + "-" + App.state.display;
+  console.log(specialtiesList);
   SPECIALTIES[specialtiesList].map((specialty) => {
     const specialityBtnDiv = document.createElement("div");
     specialityBtnDiv.setAttribute("class", "specialty-btn-div");
@@ -542,23 +520,23 @@ const removeSpecialtyHtmlElements = () => {
   }
 };
 
-const setCcuState = (currentCcu) => {
-  state.camera.name = currentCcu;
-  state.camera.clicked = true;
-};
-const resetCcuState = () => {
-  state.camera.name = "";
-  state.camera.clicked = false;
-};
+// const setCcuState = (currentCcu) => {
+//   state.camera.name = currentCcu;
+//   state.camera.clicked = true;
+// };
+// const resetCcuState = () => {
+//   state.camera.name = "";
+//   state.camera.clicked = false;
+// };
 
-const setDisplayState = (currentDisplay) => {
-  state.display.name = currentDisplay;
-  state.display.clicked = true;
-};
-const resetDisplayState = () => {
-  state.display.name = "";
-  state.display.clicked = false;
-};
+// const setDisplayState = (currentDisplay) => {
+//   state.display.name = currentDisplay;
+//   state.display.clicked = true;
+// };
+// const resetDisplayState = () => {
+//   state.display.name = "";
+//   state.display.clicked = false;
+// };
 
 const setSpecialtyState = (currentSpecialty) => {
   state.specialty.name = currentSpecialty;
@@ -569,17 +547,19 @@ const resetSpecialtyState = () => {
   state.specialty.clicked = false;
 };
 
-const closeDisplayDiv = (cameraDisplayDiv) => {
-  const monitorsDiv = document.getElementById(
-    cameraDisplayDiv + "-monitors-div"
-  );
-  monitorsDiv.className = "monitors-div";
+const closeDisplayDiv = () => {
+  const monitorsDiv = document.getElementsByClassName("monitors-div active");
+  console.log(monitorsDiv);
+  for (let item of monitorsDiv) {
+    console.log(item.classList);
+    item.classList.remove("active");
+  }
 };
 
-const openMonitorsDiv = (currentCcu) => {
-  const monitorsDiv = document.getElementById(currentCcu + "-monitors-div");
-  monitorsDiv.className = "monitors-div-active";
-  assignCurrentDisplays(currentCcu);
+const openDisplayDiv = () => {
+  const monitorsDiv = document.getElementById(App.state.ccu + "-monitors-div");
+  monitorsDiv.classList.add("active");
+  assignCurrentDisplays(App.state.ccu);
 };
 
 const assignCurrentDisplays = (currentCcu) => {
@@ -594,13 +574,14 @@ const assignCurrentDisplays = (currentCcu) => {
   displayEventListener();
 };
 
-const showCurrentDisplays = (currentDisplays, currentCcu) => {
+const showCurrentDisplays = (currentDisplays) => {
   const monitorBtnsDiv = document.getElementById(
-    currentCcu + "-monitors-btns-div"
+    App.state.ccu + "-monitors-btns-div"
   );
   currentDisplays.map((display) => {
+    console.log(monitorBtnsDiv);
     const monitorBtnDiv = document.createElement("div");
-    monitorBtnDiv.setAttribute("id", currentCcu + "-" + display.name);
+    monitorBtnDiv.setAttribute("id", App.state.ccu + "-" + display.name);
     monitorBtnDiv.setAttribute("class", "monitor-btn-div");
     monitorBtnDiv.setAttribute("data-display", display.name);
     const monitorBtnTag = document.createElement("p");
@@ -625,17 +606,20 @@ const resetDisplayBtn = () => {
     "monitor-btn-div-active"
   );
   for (let item of displayBtnDiv) {
+    console.log(item.classList);
     item.className = "monitor-btn-div";
   }
 };
 
 const reasignDisplayBtn = () => {
+  console.log(App.state.display, App.state.ccu);
   const displayBtnDiv = document.getElementById(
-    state.camera.name + "-" + state.display.name
+    App.state.ccu + "-" + App.state.display
   );
+  console.log(displayBtnDiv);
   if (displayBtnDiv !== null) {
     displayBtnDiv.className = "monitor-btn-div-active";
   } else {
-    resetDisplayState();
+    App.state.changeDisplay("");
   }
 };
