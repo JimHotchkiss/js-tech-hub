@@ -12,6 +12,34 @@ const state = {
   cameraSettings: [],
 };
 
+const App = function _App() {
+  return `
+    <h1>Hello Vanilla JS!</h1>
+    <div>
+      Example of state management in Vanilla JS
+    </div>
+    <br />
+    <h1>${_App.state.ccu}</h1>
+    <button id="button">Increase</button>
+  `;
+};
+
+App.state = {
+  ccu: "",
+  display: "",
+  specialty: "",
+  changeCcu: (input) => {
+    console.log(input);
+    App.state.ccu = input;
+  },
+  changeDisplay: (input) => {
+    App.state.display = input;
+  },
+  changeSpecialty: (input) => {
+    App.state.specialty = input;
+  },
+};
+
 // Specialties
 const SPECIALTIES = {
   "1688-4k": [
@@ -158,6 +186,7 @@ const ccuEventListener = () => {
   for (let item of camerasDiv) {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
+      App.state.changeCcu(currentCcu);
       selectCCu(currentCcu);
     });
   }
@@ -171,8 +200,9 @@ const formEventListener = () => {
 };
 
 const selectCCu = (currentCcu) => {
-  const cameraDisplayDiv = state.camera.name;
-  if (currentCcu === "1688" && state.display.name === "Vision Elect") {
+  const cameraDisplayDiv = App.state.ccu;
+  if (currentCcu === "1688" && App.state.ccu === "Vision Elect") {
+    console.log("1688 and VE");
     resetDisplayState();
     closeDisplayDiv(cameraDisplayDiv);
     hideSpecialties();
@@ -181,10 +211,11 @@ const selectCCu = (currentCcu) => {
     rotateOpenArrow();
     changeInfoText();
   } else if (
-    state.camera.name === currentCcu &&
-    state.display.name !== "" &&
-    state.specialty.name !== ""
+    App.state.ccu === currentCcu &&
+    App.state.display !== "" &&
+    App.state.specialty !== ""
   ) {
+    console.log("setting display, close ccu");
     hideSpecialties();
     removeSpecialtyHtmlElements();
     resetSpecialtyState();
@@ -193,9 +224,9 @@ const selectCCu = (currentCcu) => {
     resetDisplayBtn();
     resetDisplayState();
     rotateCloseArrow();
-    resetCcuState();
+    App.state.changeCcu("");
     changeInfoText();
-  } else if (state.camera.name === currentCcu && state.display.name !== "") {
+  } else if (App.state.ccu === currentCcu && App.state.display !== "") {
     removeDisplayBtnHtml();
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
@@ -206,22 +237,21 @@ const selectCCu = (currentCcu) => {
     hideSpecialties();
     removeSpecialtyHtmlElements();
   } else if (state.camera.name === currentCcu) {
+    console.log("close 1688");
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
-    resetCcuState();
+    App.state.changeCcu("");
     changeInfoText();
     hideSpecialties();
     removeDisplayBtnHtml();
   } else if (
-    state.camera.name !== "" &&
-    state.display.name !== "" &&
-    state.specialty.name !== ""
+    App.state.ccu !== "" &&
+    App.state.display !== "" &&
+    App.state.specialty !== ""
   ) {
     setCcuState(currentCcu);
     closeDisplayDiv(cameraDisplayDiv);
     rotateCloseArrow();
-    // resetSpecialtyState()
-    // closeSpecialtyDiv()
     reasignDisplayBtn();
     openMonitorsDiv(currentCcu);
     rotateCloseArrow();
@@ -243,7 +273,7 @@ const selectCCu = (currentCcu) => {
     openMonitorsDiv(currentCcu);
     changeInfoText();
   } else {
-    setCcuState(currentCcu);
+    App.state.changeCcu(currentCcu);
     openMonitorsDiv(currentCcu);
     rotateOpenArrow();
     changeInfoText();
@@ -251,7 +281,8 @@ const selectCCu = (currentCcu) => {
 };
 
 const rotateOpenArrow = () => {
-  const arrowDiv = document.getElementById(state.camera.name + "-arrow");
+  console.log(App.state.ccu);
+  const arrowDiv = document.getElementById(App.state.ccu + "-arrow");
   arrowDiv.className = arrowDiv.className + " open";
 };
 const rotateCloseArrow = () => {
@@ -288,6 +319,7 @@ const changeInfoText = () => {
 const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
+      console.log(event.currentTarget.dataset.display);
       const currentDisplay = event.currentTarget.dataset.display;
       if (state.display.name === currentDisplay) {
         resetDisplayState();
@@ -390,7 +422,7 @@ const populateSettings = (settingsContainer) => {
 
   const cameraTagText = document.createElement("p");
   cameraTagText.setAttribute("id", "camera-tag-text");
-  cameraTagText.innerText = state.camera.name;
+  cameraTagText.innerText = App.state.ccu;
   // put settings-title-camera-tag into settings-title-camera-text-div
   settingsTitleCameraTextDiv.appendChild(settingsTitleCameraTag);
   settingsTitleCameraTextDiv.appendChild(cameraTagText);
