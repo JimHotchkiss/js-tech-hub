@@ -28,6 +28,7 @@ App.state = {
   ccu: "",
   display: "",
   specialty: "",
+  settings: {},
   changeCcu: (input) => {
     console.log(input);
     App.state.ccu = input;
@@ -38,6 +39,9 @@ App.state = {
   },
   changeSpecialty: (input) => {
     App.state.specialty = input;
+  },
+  changeSettings: (input) => {
+    App.state.settings = input;
   },
 };
 
@@ -187,13 +191,17 @@ const ccuEventListener = () => {
   for (let item of camerasDiv) {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
-      console.log(currentCcu, App.state.ccu);
       if (currentCcu === App.state.ccu) {
+        console.log(currentCcu, App.state.ccu);
         App.state.changeCcu("");
+        App.state.changeDisplay("");
+        removeDisplayBtnHtml();
+        closeDisplayDiv();
+        rotateCloseArrow();
       } else {
         App.state.changeCcu(currentCcu);
+        selectCCu(currentCcu);
       }
-      selectCCu(currentCcu);
     });
   }
 };
@@ -226,27 +234,20 @@ const selectCCu = () => {
     closeDisplayDiv(cameraDisplayDiv);
     removeDisplayBtnHtml();
     resetDisplayBtn();
-    resetDisplayState();
+    App.state.changeDisplay("");
     rotateCloseArrow();
     App.state.changeCcu("");
     changeInfoText();
   } else if (App.state.ccu !== "" && App.state.display !== "") {
-    console.log("ccu selected and display");
+    console.log("ccu selected and display", App.state.display);
     closeDisplayDiv(cameraDisplayDiv);
     removeDisplayBtnHtml();
-    reasignDisplayBtn();
+    resetDisplayBtn();
     rotateCloseArrow();
+    openDisplayDiv(cameraDisplayDiv);
+    reasignDisplayBtn();
     rotateOpenArrow();
     changeInfoText();
-    openDisplayDiv(cameraDisplayDiv);
-  } else if (App.state.ccu !== "") {
-    console.log("close ccu", App.state.ccu);
-    closeDisplayDiv(cameraDisplayDiv);
-    rotateCloseArrow();
-    App.state.changeCcu("");
-    changeInfoText();
-    hideSpecialties();
-    removeDisplayBtnHtml();
   } else {
     console.log("first selection");
     openDisplayDiv();
@@ -258,17 +259,17 @@ const selectCCu = () => {
 const rotateOpenArrow = () => {
   console.log(App.state.ccu);
   const arrowDiv = document.getElementById(App.state.ccu + "-arrow");
-  arrowDiv.className = arrowDiv.className + " open";
+  arrowDiv.classList.add("open");
 };
 const rotateCloseArrow = () => {
   const arrowDivs = document.getElementsByClassName("arrow-outer-div open");
+
   for (let item of arrowDivs) {
-    item.className = "arrow-outer-div";
+    item.classList.remove("open");
   }
 };
 
 const changeInfoText = () => {
-  console.log(App.state.ccu);
   const infoTag = document.getElementById("info-tag-text");
   if (
     App.state.ccu !== "" &&
@@ -320,11 +321,11 @@ const specialtiesEventListener = () => {
   for (let item of specialityBtnDiv) {
     item.addEventListener("click", () => {
       const currentSpecialty = event.currentTarget.dataset.specialty;
-      if (state.specialty.name === currentSpecialty) {
+      if (App.state.specialty === currentSpecialty) {
         resetSpecialtyState();
         clearSettingsHtml();
       } else {
-        setSpecialtyState(currentSpecialty);
+        App.state.changeSpecialty(currentSpecialty);
         setSpecialtyBtn();
         hideInfo();
         showSettingsContainer();
@@ -348,12 +349,16 @@ const showSettingsContainer = () => {
   populateSettings(settingsContainer);
 };
 
-// const showSettingsBodyContainer = () => {
-//   const settingsContainer = document.getElementById(
-//     "settings-body-container-id"
-//   );
-//   settingsContainer.classList.toggle("show");
-// };
+const showSettingsBodyContainer = () => {
+  console.log(App.state.settings);
+  App.state.settings.map((setting) => {
+    console.log(setting);
+  });
+  // const settingsContainer = document.getElementById(
+  //   "settings-body-container-id"
+  // );
+  // settingsContainer.classList.toggle("show");
+};
 
 const fetchSettings = () => {
   fetch("./settings.json")
@@ -363,13 +368,13 @@ const fetchSettings = () => {
 
 const filterCcu = (data) => {
   data.ccus.map((ccu) => {
-    if (ccu[state.camera.name]) {
-      ccu[state.camera.name]["monitors"].map((monitor) => {
-        if (monitor[state.display.name]) {
-          monitor[state.display.name]["specialties"].map((specialty) => {
-            if (specialty[state.specialty.name]) {
-              state.cameraSettings = specialty[state.specialty.name];
-              // setSettingsState(state.settings[0]["ccu"]);
+    if (ccu[App.state.ccu]) {
+      ccu[App.state.ccu]["monitors"].map((monitor) => {
+        if (monitor[App.state.display]) {
+          monitor[App.state.display]["specialties"].map((specialty) => {
+            if (specialty[App.state.specialty]) {
+              App.state.changeSettings(specialty[App.state.specialty]);
+              showSettingsBodyContainer();
             }
           });
         }
@@ -379,7 +384,6 @@ const filterCcu = (data) => {
 };
 
 const populateSettings = (settingsContainer) => {
-  console.log(state.camera.name, state.display.name, state.specialty.name);
   // settings-title-container
   const settingsTitleContainer = document.createElement("div");
   settingsTitleContainer.setAttribute("class", "settings-title-container");
@@ -420,7 +424,11 @@ const populateSettings = (settingsContainer) => {
   const settingsTitleSpecialtyTag = document.createElement("p");
   settingsTitleSpecialtyTag.setAttribute("id", "settings-title-specialty-tag");
   settingsTitleSpecialtyTag.innerText = "SPECIALTY";
+  const specialtyTagText = document.createElement("p");
+  specialtyTagText.setAttribute("id", "specialty-tag-text");
+  specialtyTagText.innerText = App.state.specialty;
   settingsTitleSpecialtyTextDiv.appendChild(settingsTitleSpecialtyTag);
+  settingsTitleSpecialtyTextDiv.appendChild(specialtyTagText);
   // settings-title-specialty-text-div goes inside settings-title-camera
   settingsTitleCamera.appendChild(settingsTitleSpecialtyTextDiv);
   // settings-title-camera goes inside settings-title-container
@@ -467,7 +475,7 @@ const populateSettings = (settingsContainer) => {
 };
 
 const setSpecialtyBtn = () => {
-  const specialtyBtn = document.getElementById(state.specialty.name);
+  const specialtyBtn = document.getElementById(App.state.specialty);
   specialtyBtn.className = "specialty-btn-div-active";
 };
 
@@ -520,33 +528,6 @@ const removeSpecialtyHtmlElements = () => {
   }
 };
 
-// const setCcuState = (currentCcu) => {
-//   state.camera.name = currentCcu;
-//   state.camera.clicked = true;
-// };
-// const resetCcuState = () => {
-//   state.camera.name = "";
-//   state.camera.clicked = false;
-// };
-
-// const setDisplayState = (currentDisplay) => {
-//   state.display.name = currentDisplay;
-//   state.display.clicked = true;
-// };
-// const resetDisplayState = () => {
-//   state.display.name = "";
-//   state.display.clicked = false;
-// };
-
-const setSpecialtyState = (currentSpecialty) => {
-  state.specialty.name = currentSpecialty;
-  state.specialty.clicked = true;
-};
-const resetSpecialtyState = () => {
-  state.specialty.name = "";
-  state.specialty.clicked = false;
-};
-
 const closeDisplayDiv = () => {
   const monitorsDiv = document.getElementsByClassName("monitors-div active");
   console.log(monitorsDiv);
@@ -557,6 +538,7 @@ const closeDisplayDiv = () => {
 };
 
 const openDisplayDiv = () => {
+  console.log(App.state.ccu);
   const monitorsDiv = document.getElementById(App.state.ccu + "-monitors-div");
   monitorsDiv.classList.add("active");
   assignCurrentDisplays(App.state.ccu);
@@ -579,7 +561,7 @@ const showCurrentDisplays = (currentDisplays) => {
     App.state.ccu + "-monitors-btns-div"
   );
   currentDisplays.map((display) => {
-    console.log(monitorBtnsDiv);
+    console.log("monitorBtnsDiv", monitorBtnsDiv, display);
     const monitorBtnDiv = document.createElement("div");
     monitorBtnDiv.setAttribute("id", App.state.ccu + "-" + display.name);
     monitorBtnDiv.setAttribute("class", "monitor-btn-div");
@@ -588,6 +570,7 @@ const showCurrentDisplays = (currentDisplays) => {
     monitorBtnTag.setAttribute("class", "monitor-btn-tag");
     monitorBtnTag.innerHTML = display.name;
     monitorBtnDiv.appendChild(monitorBtnTag);
+    console.log(monitorBtnTag);
     monitorBtnsDiv.appendChild(monitorBtnDiv);
   });
 };
@@ -615,6 +598,7 @@ const reasignDisplayBtn = () => {
   console.log(App.state.display, App.state.ccu);
   const displayBtnDiv = document.getElementById(
     App.state.ccu + "-" + App.state.display
+    // console.log(App.state.ccu + "-" + App.state.display)
   );
   console.log(displayBtnDiv);
   if (displayBtnDiv !== null) {
