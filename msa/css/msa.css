@@ -282,7 +282,7 @@ html {
   margin-top: 25px;
 }
 
-.info-div-hide {
+.info-div.hide {
   display: none;
 }
 
@@ -335,11 +335,10 @@ html {
   background: lightsalmon;
 }
 
-#specialties-div {
+.specialties-div {
   display: none;
 }
-
-#specialties-div-show {
+.specialties-div.show {
   display: flex;
 
   margin-left: 30px;
@@ -517,6 +516,10 @@ html {
   padding-left: 30px;
 }
 
+.settings-title-display-specialty-text-div {
+  display: flex;
+}
+
 .settings-title-display-specialty-text-div
   #settings-title-display-specialty-tag {
   font-size: 16px;
@@ -532,8 +535,31 @@ html {
   width: 50%;
 }
 
+.settings-title-display-specialty-text-div #display-specialty-tag-text {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  color: #707070;
+  opacity: 1;
+  padding-top: 32px;
+  padding-left: 10px;
+}
+
 .settings-title-display-text-div {
+  display: flex;
   width: 50%;
+}
+
+.settings-title-display-text-div #display-tag-text {
+  font-family: Roboto;
+  font-size: 12px;
+  font-weight: 300;
+  letter-spacing: 0px;
+  color: #707070;
+  opacity: 1;
+  padding-top: 32px;
+  padding-left: 10px;
 }
 
 .settings-title-camera p {

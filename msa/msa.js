@@ -5,43 +5,41 @@ window.onload = function loadCcus() {
   specialtiesEventListener();
 };
 
-// const state = {
-//   camera: { name: "", clicked: false },
-//   display: { name: "", clicked: false },
-//   specialty: { name: "", clicked: false },
-//   cameraSettings: [],
-// };
+const Store = function _Store() {};
 
-const App = function _App() {
-  return `
-    <h1>Hello Vanilla JS!</h1>
-    <div>
-      Example of state management in Vanilla JS
-    </div>
-    <br />
-    <h1>${_App.state.ccu}</h1>
-    <button id="button">Increase</button>
-  `;
+function Store1(camera, display, specialty, {}) {
+  (this.camera = camera),
+    (this.display = display),
+    (this.specialty = specialty),
+    (this.setting = {});
+}
+
+Store1.prototype.setSettingTitle = function () {
+  const settingsContainerId = document.getElementById("settings-container-id");
+  const testDiv = documment.createElement("div");
+  testDiv.setAttribute("class", "test-div");
+  testDiv.innerText = "Test div";
+  settingsContainerId.appendChild(testDiv);
 };
 
-App.state = {
+Store.state = {
   ccu: "",
   display: "",
   specialty: "",
   settings: {},
   changeCcu: (input) => {
     console.log(input);
-    App.state.ccu = input;
+    Store.state.ccu = input;
   },
   changeDisplay: (input) => {
     console.log(input);
-    App.state.display = input;
+    Store.state.display = input;
   },
   changeSpecialty: (input) => {
-    App.state.specialty = input;
+    Store.state.specialty = input;
   },
   changeSettings: (input) => {
-    App.state.settings = input;
+    Store.state.settings = input;
   },
 };
 
@@ -191,15 +189,22 @@ const ccuEventListener = () => {
   for (let item of camerasDiv) {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
-      if (currentCcu === App.state.ccu) {
-        console.log(currentCcu, App.state.ccu);
-        App.state.changeCcu("");
-        App.state.changeDisplay("");
+      if (currentCcu === Store.state.ccu) {
+        console.log(currentCcu, Store.state.ccu);
+        Store.state.changeCcu("");
+        Store.state.changeDisplay("");
+        Store.state.changeSpecialty("");
+        Store.state.changeSettings("");
+        clearSettingsHtml();
+        hideSettingsContainer();
         removeDisplayBtnHtml();
+        toggleSpecialties();
+        changeInfoText();
+        toggleInfo();
         closeDisplayDiv();
         rotateCloseArrow();
       } else {
-        App.state.changeCcu(currentCcu);
+        Store.state.changeCcu(currentCcu);
         selectCCu(currentCcu);
       }
     });
@@ -214,32 +219,35 @@ const formEventListener = () => {
 };
 
 const selectCCu = () => {
-  const cameraDisplayDiv = App.state.ccu;
-  if (App.state.ccu === "1688" && App.state.display === "Vision Elect") {
-    App.state.changeDisplay("");
+  const cameraDisplayDiv = Store.state.ccu;
+  if (Store.state.ccu === "1688" && Store.state.display === "Vision Elect") {
+    Store.state.changeDisplay("");
     closeDisplayDiv(cameraDisplayDiv);
     openDisplayDiv();
     rotateCloseArrow();
     resetDisplayBtn();
+    toggleSpecialties();
+    removeSpecialtyHtmlElements();
+    changeInfoText();
     console.log("1688 VE");
   } else if (
-    App.state.ccu === "" &&
-    App.state.display !== "" &&
-    App.state.specialty !== ""
+    Store.state.ccu === "" &&
+    Store.state.display !== "" &&
+    Store.state.specialty !== ""
   ) {
     console.log("setting display, close ccu");
-    hideSpecialties();
+    toggleSpecialties();
     removeSpecialtyHtmlElements();
-    App.state.specialty("");
+    Store.state.specialty("");
     closeDisplayDiv(cameraDisplayDiv);
     removeDisplayBtnHtml();
     resetDisplayBtn();
-    App.state.changeDisplay("");
+    Store.state.changeDisplay("");
     rotateCloseArrow();
-    App.state.changeCcu("");
+    Store.state.changeCcu("");
     changeInfoText();
-  } else if (App.state.ccu !== "" && App.state.display !== "") {
-    console.log("ccu selected and display", App.state.display);
+  } else if (Store.state.ccu !== "" && Store.state.display !== "") {
+    console.log("ccu selected and display", Store.state.display);
     closeDisplayDiv(cameraDisplayDiv);
     removeDisplayBtnHtml();
     resetDisplayBtn();
@@ -248,6 +256,7 @@ const selectCCu = () => {
     reasignDisplayBtn();
     rotateOpenArrow();
     changeInfoText();
+    listSpecialties();
   } else {
     console.log("first selection");
     openDisplayDiv();
@@ -257,8 +266,8 @@ const selectCCu = () => {
 };
 
 const rotateOpenArrow = () => {
-  console.log(App.state.ccu);
-  const arrowDiv = document.getElementById(App.state.ccu + "-arrow");
+  console.log(Store.state.ccu);
+  const arrowDiv = document.getElementById(Store.state.ccu + "-arrow");
   arrowDiv.classList.add("open");
 };
 const rotateCloseArrow = () => {
@@ -270,20 +279,21 @@ const rotateCloseArrow = () => {
 };
 
 const changeInfoText = () => {
+  console.log(Store.state);
   const infoTag = document.getElementById("info-tag-text");
   if (
-    App.state.ccu !== "" &&
-    (App.state.display !== "") & (App.state.specialty !== "")
+    Store.state.ccu !== "" &&
+    (Store.state.display !== "") & (Store.state.specialty !== "")
   ) {
     infoTag.innerText = "Select Specialty to populate settings...";
   } else if (
-    App.state.ccu !== "" &&
-    (App.state.display !== "") & (App.state.specialty === "")
+    Store.state.ccu !== "" &&
+    (Store.state.display !== "") & (Store.state.specialty === "")
   ) {
     infoTag.innerText = "Select Specialty to populate settings...";
   } else if (
-    App.state.ccu !== "" &&
-    (App.state.display === "") & (App.state.specialty === "")
+    Store.state.ccu !== "" &&
+    (Store.state.display === "") & (Store.state.specialty === "")
   ) {
     infoTag.innerText =
       "Select a Display and a Specialy to populate settings...";
@@ -297,16 +307,16 @@ const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
       const currentDisplay = event.currentTarget.dataset.display;
-      if (App.state.display === currentDisplay) {
+      if (Store.state.display === currentDisplay) {
         console.log("same display selected");
-        App.state.changeDisplay("");
+        Store.state.changeDisplay("");
         resetDisplayBtn();
         changeInfoText();
-        hideSpecialties();
+        toggleSpecialties();
         removeSpecialtyHtmlElements();
       } else {
         console.log("display selected", currentDisplay);
-        App.state.changeDisplay(currentDisplay);
+        Store.state.changeDisplay(currentDisplay);
         resetDisplayBtn();
         reasignDisplayBtn();
         changeInfoText();
@@ -321,13 +331,13 @@ const specialtiesEventListener = () => {
   for (let item of specialityBtnDiv) {
     item.addEventListener("click", () => {
       const currentSpecialty = event.currentTarget.dataset.specialty;
-      if (App.state.specialty === currentSpecialty) {
+      if (Store.state.specialty === currentSpecialty) {
         resetSpecialtyState();
         clearSettingsHtml();
       } else {
-        App.state.changeSpecialty(currentSpecialty);
+        Store.state.changeSpecialty(currentSpecialty);
         setSpecialtyBtn();
-        hideInfo();
+        toggleInfo();
         showSettingsContainer();
         fetchSettings();
       }
@@ -349,9 +359,13 @@ const showSettingsContainer = () => {
   populateSettings(settingsContainer);
 };
 
+const hideSettingsContainer = () => {
+  const settingsContainer = document.getElementById("settings-container-id");
+  settingsContainer.classList.toggle("show");
+};
+
 const showSettingsBodyContainer = () => {
-  console.log(App.state.settings);
-  App.state.settings.map((setting) => {
+  Store.state.settings.map((setting) => {
     console.log(setting);
   });
   // const settingsContainer = document.getElementById(
@@ -368,12 +382,12 @@ const fetchSettings = () => {
 
 const filterCcu = (data) => {
   data.ccus.map((ccu) => {
-    if (ccu[App.state.ccu]) {
-      ccu[App.state.ccu]["monitors"].map((monitor) => {
-        if (monitor[App.state.display]) {
-          monitor[App.state.display]["specialties"].map((specialty) => {
-            if (specialty[App.state.specialty]) {
-              App.state.changeSettings(specialty[App.state.specialty]);
+    if (ccu[Store.state.ccu]) {
+      ccu[Store.state.ccu]["monitors"].map((monitor) => {
+        if (monitor[Store.state.display]) {
+          monitor[Store.state.display]["specialties"].map((specialty) => {
+            if (specialty[Store.state.specialty]) {
+              Store.state.changeSettings(specialty[Store.state.specialty]);
               showSettingsBodyContainer();
             }
           });
@@ -403,7 +417,7 @@ const populateSettings = (settingsContainer) => {
 
   const cameraTagText = document.createElement("p");
   cameraTagText.setAttribute("id", "camera-tag-text");
-  cameraTagText.innerText = App.state.ccu;
+  cameraTagText.innerText = Store.state.ccu;
   // put settings-title-camera-tag into settings-title-camera-text-div
   settingsTitleCameraTextDiv.appendChild(settingsTitleCameraTag);
   settingsTitleCameraTextDiv.appendChild(cameraTagText);
@@ -426,7 +440,7 @@ const populateSettings = (settingsContainer) => {
   settingsTitleSpecialtyTag.innerText = "SPECIALTY";
   const specialtyTagText = document.createElement("p");
   specialtyTagText.setAttribute("id", "specialty-tag-text");
-  specialtyTagText.innerText = App.state.specialty;
+  specialtyTagText.innerText = Store.state.specialty;
   settingsTitleSpecialtyTextDiv.appendChild(settingsTitleSpecialtyTag);
   settingsTitleSpecialtyTextDiv.appendChild(specialtyTagText);
   // settings-title-specialty-text-div goes inside settings-title-camera
@@ -449,8 +463,13 @@ const populateSettings = (settingsContainer) => {
   const settingsTitleDisplayTag = document.createElement("p");
   settingsTitleDisplayTag.setAttribute("id", "settings-title-display-tag");
   settingsTitleDisplayTag.innerText = "DISPLAY";
+
+  const displayTagText = document.createElement("p");
+  displayTagText.setAttribute("id", "display-tag-text");
+  displayTagText.innerText = Store.state.display;
   // settings-title-display-tag goes into settings-title-display-text-div
   settingsTitleDisplayTextDiv.appendChild(settingsTitleDisplayTag);
+  settingsTitleDisplayTextDiv.appendChild(displayTagText);
   // settings-title-display-text-div goes into settings-title-display
   settingsTitleDisplay.appendChild(settingsTitleDisplayTextDiv);
   // settings-title-display goes inside settings-container-id
@@ -470,27 +489,31 @@ const populateSettings = (settingsContainer) => {
   settingsTitleDisplaySpecialtyTextDiv.appendChild(
     settingsTitleDisplaySpecialtyTag
   );
+  const displaySpecialtyTagText = document.createElement("p");
+  displaySpecialtyTagText.setAttribute("id", "display-specialty-tag-text");
+  displaySpecialtyTagText.innerText = Store.state.specialty;
+  settingsTitleDisplaySpecialtyTextDiv.appendChild(displaySpecialtyTagText);
   settingsTitleDisplay.appendChild(settingsTitleDisplaySpecialtyTextDiv);
   settingsContainer.appendChild(settingsTitleDisplay);
 };
 
 const setSpecialtyBtn = () => {
-  const specialtyBtn = document.getElementById(App.state.specialty);
+  const specialtyBtn = document.getElementById(Store.state.specialty);
   specialtyBtn.className = "specialty-btn-div-active";
 };
 
-const hideInfo = () => {
+const toggleInfo = () => {
   const infoDiv = document.getElementById("info-div-id");
-  infoDiv.className = "info-div-hide";
+  infoDiv.classList.toggle("hide");
 };
 
 const listSpecialties = () => {
   removeSpecialtyHtmlElements();
-  showSpecialties();
+  toggleSpecialties();
   const specialtiesParentDiv = document.getElementById(
     "specialties-parent-div"
   );
-  let specialtiesList = App.state.ccu + "-" + App.state.display;
+  let specialtiesList = Store.state.ccu + "-" + Store.state.display;
   console.log(specialtiesList);
   SPECIALTIES[specialtiesList].map((specialty) => {
     const specialityBtnDiv = document.createElement("div");
@@ -507,18 +530,9 @@ const listSpecialties = () => {
   specialtiesEventListener();
 };
 
-const showSpecialties = () => {
+const toggleSpecialties = () => {
   const specialtiesDiv = document.getElementById("specialties-div");
-  if (specialtiesDiv !== null) {
-    specialtiesDiv.id = "specialties-div-show";
-  }
-};
-
-const hideSpecialties = () => {
-  const specialtiesDiv = document.getElementById("specialties-div-show");
-  if (specialtiesDiv !== null) {
-    specialtiesDiv.id = "specialties-div";
-  }
+  specialtiesDiv.classList.toggle("show");
 };
 
 const removeSpecialtyHtmlElements = () => {
@@ -538,10 +552,12 @@ const closeDisplayDiv = () => {
 };
 
 const openDisplayDiv = () => {
-  console.log(App.state.ccu);
-  const monitorsDiv = document.getElementById(App.state.ccu + "-monitors-div");
+  console.log(Store.state.ccu);
+  const monitorsDiv = document.getElementById(
+    Store.state.ccu + "-monitors-div"
+  );
   monitorsDiv.classList.add("active");
-  assignCurrentDisplays(App.state.ccu);
+  assignCurrentDisplays(Store.state.ccu);
 };
 
 const assignCurrentDisplays = (currentCcu) => {
@@ -558,12 +574,12 @@ const assignCurrentDisplays = (currentCcu) => {
 
 const showCurrentDisplays = (currentDisplays) => {
   const monitorBtnsDiv = document.getElementById(
-    App.state.ccu + "-monitors-btns-div"
+    Store.state.ccu + "-monitors-btns-div"
   );
   currentDisplays.map((display) => {
     console.log("monitorBtnsDiv", monitorBtnsDiv, display);
     const monitorBtnDiv = document.createElement("div");
-    monitorBtnDiv.setAttribute("id", App.state.ccu + "-" + display.name);
+    monitorBtnDiv.setAttribute("id", Store.state.ccu + "-" + display.name);
     monitorBtnDiv.setAttribute("class", "monitor-btn-div");
     monitorBtnDiv.setAttribute("data-display", display.name);
     const monitorBtnTag = document.createElement("p");
@@ -595,15 +611,15 @@ const resetDisplayBtn = () => {
 };
 
 const reasignDisplayBtn = () => {
-  console.log(App.state.display, App.state.ccu);
+  console.log(Store.state.display, Store.state.ccu);
   const displayBtnDiv = document.getElementById(
-    App.state.ccu + "-" + App.state.display
-    // console.log(App.state.ccu + "-" + App.state.display)
+    Store.state.ccu + "-" + Store.state.display
+    // console.log(Store.state.ccu + "-" + Store.state.display)
   );
   console.log(displayBtnDiv);
   if (displayBtnDiv !== null) {
     displayBtnDiv.className = "monitor-btn-div-active";
   } else {
-    App.state.changeDisplay("");
+    Store.state.changeDisplay("");
   }
 };
