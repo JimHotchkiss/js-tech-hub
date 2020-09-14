@@ -433,8 +433,7 @@ html {
 
 .settings-container.show {
   display: flex;
-  /* flex-direction: column; */
-  height: 620px;
+  height: 618px;
   max-width: 100%;
   margin-top: 10px;
   background: lightskyblue;
@@ -442,6 +441,7 @@ html {
 
 .settings-title-container {
   display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -451,6 +451,12 @@ html {
   height: 60px;
   background: #eaeef2;
   border-right: 1px dashed #b3b0b0;
+}
+
+.settings-body-camera {
+  width: 100%;
+  height: 100%;
+  background: lightslategrey;
 }
 
 .settings-title-camera-text-div {
@@ -572,11 +578,22 @@ html {
   opacity: 0.7;
 }
 
+.settings-display-specialty-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: lightsalmon;
+}
+
 .settings-title-display {
   display: flex;
   width: 100%;
   height: 60px;
   background: #eaeef2;
+}
+
+.settings-display-specialty-body {
 }
 
 .settings-title-display p {

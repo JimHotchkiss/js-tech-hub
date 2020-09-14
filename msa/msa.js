@@ -356,7 +356,7 @@ const showSettingsContainer = () => {
   const settingsContainer = document.getElementById("settings-container-id");
   settingsContainer.classList.toggle("show");
   // showSettingsBodyContainer();
-  populateSettings(settingsContainer);
+  populateSettingsTitle(settingsContainer);
 };
 
 const hideSettingsContainer = () => {
@@ -397,10 +397,11 @@ const filterCcu = (data) => {
   });
 };
 
-const populateSettings = (settingsContainer) => {
+const populateSettingsTitle = (settingsContainer) => {
   // settings-title-container
   const settingsTitleContainer = document.createElement("div");
   settingsTitleContainer.setAttribute("class", "settings-title-container");
+  settingsTitleContainer.setAttribute("id", "settings-title-container");
   // settings-title-camera
   const settingsTitleCamera = document.createElement("div");
   settingsTitleCamera.setAttribute("class", "settings-title-camera");
@@ -492,9 +493,35 @@ const populateSettings = (settingsContainer) => {
   const displaySpecialtyTagText = document.createElement("p");
   displaySpecialtyTagText.setAttribute("id", "display-specialty-tag-text");
   displaySpecialtyTagText.innerText = Store.state.specialty;
+  // settings-display-specialty-container
+  const settingsDisplaySpecialtyContainer = document.createElement("div");
+  settingsDisplaySpecialtyContainer.setAttribute(
+    "class",
+    "settings-display-specialty-container"
+  );
   settingsTitleDisplaySpecialtyTextDiv.appendChild(displaySpecialtyTagText);
   settingsTitleDisplay.appendChild(settingsTitleDisplaySpecialtyTextDiv);
-  settingsContainer.appendChild(settingsTitleDisplay);
+  settingsDisplaySpecialtyContainer.appendChild(settingsTitleDisplay);
+  settingsContainer.appendChild(settingsDisplaySpecialtyContainer);
+
+  populateSettingsBody(settingsDisplaySpecialtyContainer);
+};
+
+const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
+  const settingsTitleContainer = document.getElementById(
+    "settings-title-container"
+  );
+  const settingsBodyCamera = document.createElement("div");
+  settingsBodyCamera.setAttribute("class", "settings-body-camera");
+  settingsTitleContainer.appendChild(settingsBodyCamera);
+  console.log(settingsTitleContainer);
+  // settings-display-specialty-body goes in settings-display-specialty-container
+  const settingsDisplaySpecialtyBody = document.createElement("div");
+  settingsDisplaySpecialtyBody.setAttribute(
+    "class",
+    "settings-display-specialty-body"
+  );
+  settingsDisplaySpecialtyContainer.appendChild(settingsDisplaySpecialtyBody);
 };
 
 const setSpecialtyBtn = () => {
