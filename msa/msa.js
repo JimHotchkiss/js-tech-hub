@@ -42,6 +42,7 @@ Store.state = {
     Store.state.settings = input;
   },
 };
+const settingsContainer = document.getElementById("settings-container-id");
 
 // Specialties
 const SPECIALTIES = {
@@ -279,7 +280,7 @@ const rotateCloseArrow = () => {
 };
 
 const changeInfoText = () => {
-  console.log(Store.state);
+  console.log(Store.state.settings);
   const infoTag = document.getElementById("info-tag-text");
   if (
     Store.state.ccu !== "" &&
@@ -353,25 +354,19 @@ const clearSettingsHtml = () => {
 };
 
 const showSettingsContainer = () => {
-  const settingsContainer = document.getElementById("settings-container-id");
   settingsContainer.classList.toggle("show");
-  // showSettingsBodyContainer();
-  populateSettingsTitle(settingsContainer);
 };
 
 const hideSettingsContainer = () => {
-  const settingsContainer = document.getElementById("settings-container-id");
   settingsContainer.classList.toggle("show");
 };
 
-const showSettingsBodyContainer = () => {
+const showSettings = () => {
   Store.state.settings.map((setting) => {
-    console.log(setting);
+    const cameraSettingText = document.createElement("p");
+    cameraSettingText.setAttribute("class", "camera-setting-text");
+    cameraSettingText.innerText = setting;
   });
-  // const settingsContainer = document.getElementById(
-  //   "settings-body-container-id"
-  // );
-  // settingsContainer.classList.toggle("show");
 };
 
 const fetchSettings = () => {
@@ -388,7 +383,7 @@ const filterCcu = (data) => {
           monitor[Store.state.display]["specialties"].map((specialty) => {
             if (specialty[Store.state.specialty]) {
               Store.state.changeSettings(specialty[Store.state.specialty]);
-              showSettingsBodyContainer();
+              populateSettingsTitle();
             }
           });
         }
@@ -397,21 +392,20 @@ const filterCcu = (data) => {
   });
 };
 
-const populateSettingsTitle = (settingsContainer) => {
-  // settings-title-container
+const populateSettingsTitle = () => {
   const settingsTitleContainer = document.createElement("div");
   settingsTitleContainer.setAttribute("class", "settings-title-container");
   settingsTitleContainer.setAttribute("id", "settings-title-container");
-  // settings-title-camera
+  // // settings-title-camera
   const settingsTitleCamera = document.createElement("div");
   settingsTitleCamera.setAttribute("class", "settings-title-camera");
-  // settings-title-camera-text-div and settings-title-specialty-text-div go in settings-title-camera
+  // // settings-title-camera-text-div and settings-title-specialty-text-div go in settings-title-camera
   const settingsTitleCameraTextDiv = document.createElement("div");
   settingsTitleCameraTextDiv.setAttribute(
     "class",
     "settings-title-camera-text-div"
   );
-  // p tag goes inside settings-title-camera-text-div
+  // // p tag goes inside settings-title-camera-text-div
   const settingsTitleCameraTag = document.createElement("p");
   settingsTitleCameraTag.setAttribute("id", "settings-title-camera-tag");
   settingsTitleCameraTag.innerText = "CCU";
@@ -419,23 +413,23 @@ const populateSettingsTitle = (settingsContainer) => {
   const cameraTagText = document.createElement("p");
   cameraTagText.setAttribute("id", "camera-tag-text");
   cameraTagText.innerText = Store.state.ccu;
-  // put settings-title-camera-tag into settings-title-camera-text-div
+  // // put settings-title-camera-tag into settings-title-camera-text-div
   settingsTitleCameraTextDiv.appendChild(settingsTitleCameraTag);
   settingsTitleCameraTextDiv.appendChild(cameraTagText);
-  //put settings-title-camera-text-div inside settings-title-camera
+  // //put settings-title-camera-text-div inside settings-title-camera
   settingsTitleCamera.appendChild(settingsTitleCameraTextDiv);
-  // put settings-title-camera into settings-title-container
+  // // put settings-title-camera into settings-title-container
   settingsTitleContainer.appendChild(settingsTitleCamera);
-  // put settings-title-container into settings-container
+  // // put settings-title-container into settings-container
   settingsContainer.appendChild(settingsTitleContainer);
 
-  // settings-title-specialty-text-div
+  // // settings-title-specialty-text-div
   const settingsTitleSpecialtyTextDiv = document.createElement("div");
   settingsTitleSpecialtyTextDiv.setAttribute(
     "class",
     "settings-title-specialty-text-div"
   );
-  // specialty p tag goes inside settings-title-specialty-text-div
+  // // specialty p tag goes inside settings-title-specialty-text-div
   const settingsTitleSpecialtyTag = document.createElement("p");
   settingsTitleSpecialtyTag.setAttribute("id", "settings-title-specialty-tag");
   settingsTitleSpecialtyTag.innerText = "SPECIALTY";
@@ -444,23 +438,23 @@ const populateSettingsTitle = (settingsContainer) => {
   specialtyTagText.innerText = Store.state.specialty;
   settingsTitleSpecialtyTextDiv.appendChild(settingsTitleSpecialtyTag);
   settingsTitleSpecialtyTextDiv.appendChild(specialtyTagText);
-  // settings-title-specialty-text-div goes inside settings-title-camera
+  // // settings-title-specialty-text-div goes inside settings-title-camera
   settingsTitleCamera.appendChild(settingsTitleSpecialtyTextDiv);
-  // settings-title-camera goes inside settings-title-container
+  // // settings-title-camera goes inside settings-title-container
   settingsTitleContainer.appendChild(settingsTitleCamera);
-  // settings-title-container goes insdie settings-container
+  // // settings-title-container goes insdie settings-container
   settingsContainer.appendChild(settingsTitleContainer);
 
-  // Settings-title-display goes inside settings-title-container
+  // // Settings-title-display goes inside settings-title-container
   const settingsTitleDisplay = document.createElement("div");
   settingsTitleDisplay.setAttribute("class", "settings-title-display");
-  // // settings-title-display-text-div goes into settings-title-display
+  // // // settings-title-display-text-div goes into settings-title-display
   const settingsTitleDisplayTextDiv = document.createElement("div");
   settingsTitleDisplayTextDiv.setAttribute(
     "class",
     "settings-title-display-text-div"
   );
-  // #settings-title-display-tag goes inside settings-title-display-text-div
+  // // #settings-title-display-tag goes inside settings-title-display-text-div
   const settingsTitleDisplayTag = document.createElement("p");
   settingsTitleDisplayTag.setAttribute("id", "settings-title-display-tag");
   settingsTitleDisplayTag.innerText = "DISPLAY";
@@ -468,19 +462,19 @@ const populateSettingsTitle = (settingsContainer) => {
   const displayTagText = document.createElement("p");
   displayTagText.setAttribute("id", "display-tag-text");
   displayTagText.innerText = Store.state.display;
-  // settings-title-display-tag goes into settings-title-display-text-div
+  // // settings-title-display-tag goes into settings-title-display-text-div
   settingsTitleDisplayTextDiv.appendChild(settingsTitleDisplayTag);
   settingsTitleDisplayTextDiv.appendChild(displayTagText);
-  // settings-title-display-text-div goes into settings-title-display
+  // // settings-title-display-text-div goes into settings-title-display
   settingsTitleDisplay.appendChild(settingsTitleDisplayTextDiv);
-  // settings-title-display goes inside settings-container-id
-  // settings-title-display-specialty-text-div goes inside settings-title-display
+  // // settings-title-display goes inside settings-container-id
+  // // settings-title-display-specialty-text-div goes inside settings-title-display
   const settingsTitleDisplaySpecialtyTextDiv = document.createElement("div");
   settingsTitleDisplaySpecialtyTextDiv.setAttribute(
     "class",
     "settings-title-display-specialty-text-div"
   );
-  // settings-title-display-specialty-tag goes inside settings-title-display-specialty-text-div
+  // // settings-title-display-specialty-tag goes inside settings-title-display-specialty-text-div
   const settingsTitleDisplaySpecialtyTag = document.createElement("p");
   settingsTitleDisplaySpecialtyTag.setAttribute(
     "id",
@@ -493,7 +487,7 @@ const populateSettingsTitle = (settingsContainer) => {
   const displaySpecialtyTagText = document.createElement("p");
   displaySpecialtyTagText.setAttribute("id", "display-specialty-tag-text");
   displaySpecialtyTagText.innerText = Store.state.specialty;
-  // settings-display-specialty-container
+  // // settings-display-specialty-container
   const settingsDisplaySpecialtyContainer = document.createElement("div");
   settingsDisplaySpecialtyContainer.setAttribute(
     "class",
@@ -508,19 +502,46 @@ const populateSettingsTitle = (settingsContainer) => {
 };
 
 const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
+  Store.state.settings.map((setting) => {
+    console.log(setting);
+  });
   const settingsTitleContainer = document.getElementById(
     "settings-title-container"
   );
   const settingsBodyCamera = document.createElement("div");
   settingsBodyCamera.setAttribute("class", "settings-body-camera");
+  // camera-settings div goes inside settings-body-camera
+  const cameraSettingsDiv = document.createElement("div");
+  cameraSettingsDiv.setAttribute("class", "camera-settings-div");
+
+  // Need to create a loop for these divs
+
+  // camera-param goes inside camera-settings-div
+  const cameraParamDiv = document.createElement("div");
+  cameraParamDiv.setAttribute("class", "camera-param-div");
+  // camera-param-text goes into camera-param-div
+  cameraSettingsDiv.appendChild(cameraParamDiv);
+  // camera-param-text goes inside camera-param-div
+
+  // camera-setting-div goes inside camera-settings-div
+  const cameraSettingDiv = document.createElement("div");
+  cameraSettingDiv.setAttribute("class", "camera-setting-div");
+  // camera
+
+  cameraSettingsDiv.appendChild(cameraSettingDiv);
+  settingsBodyCamera.appendChild(cameraSettingDiv);
   settingsTitleContainer.appendChild(settingsBodyCamera);
-  console.log(settingsTitleContainer);
+  console.log(settingsDisplaySpecialtyContainer);
   // settings-display-specialty-body goes in settings-display-specialty-container
   const settingsDisplaySpecialtyBody = document.createElement("div");
   settingsDisplaySpecialtyBody.setAttribute(
     "class",
     "settings-display-specialty-body"
   );
+  // display-settings div goes inside settings-display-specialty-body
+  const displaySettingsDiv = document.createElement("div");
+  displaySettingsDiv.setAttribute("class", "display-settings-div");
+  settingsDisplaySpecialtyBody.appendChild(displaySettingsDiv);
   settingsDisplaySpecialtyContainer.appendChild(settingsDisplaySpecialtyBody);
 };
 
