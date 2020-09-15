@@ -28,11 +28,9 @@ Store.state = {
   specialty: "",
   settings: {},
   changeCcu: (input) => {
-    console.log(input);
     Store.state.ccu = input;
   },
   changeDisplay: (input) => {
-    console.log(input);
     Store.state.display = input;
   },
   changeSpecialty: (input) => {
@@ -44,6 +42,54 @@ Store.state = {
 };
 const settingsContainer = document.getElementById("settings-container-id");
 
+// 1688 Parameters
+const SIXTEENPARAMETERS = [
+  "Shutter Mode",
+  "Shutter Level",
+  "Area",
+  "Speed",
+  "Photometry Mode",
+  "Photometry Peak/Avg",
+  "S Gamma",
+  "BG Gamma",
+  "MPED",
+  "BG Point",
+  "R Knee Slope",
+  "R knee Point",
+  "Enhance",
+  "Chroma",
+  "B Gain",
+  "B Hue",
+  "R Gain",
+  "R Hue",
+  "ENV Gain Mode",
+  "ENV Manual Gain",
+  "ENV Level",
+  "ENV BG Offset",
+  "ENV Gamma",
+  "ENV Max Gain",
+  "Size",
+  "G Hue",
+  "G Gain",
+  "R-Ye Hue",
+  "R-Ye Gain",
+  "Ye Hue",
+  "Ye Gain",
+  "Ye-G Hue",
+  "Ye-G Gain",
+  "G-Cy Hue",
+  "G-Cy Gain",
+  "CY Hue",
+  "CY Gain",
+  "CY-B Hue",
+  "CY-B Gain",
+  "B-Mg Hue",
+  "B-Mg Gain",
+  "Mg Hue",
+  "Mg Gain",
+  "Mg-R Hue",
+  "Mg-R Gain",
+];
 // Specialties
 const SPECIALTIES = {
   "1688-4k": [
@@ -191,7 +237,6 @@ const ccuEventListener = () => {
     item.addEventListener("click", function () {
       const currentCcu = event.currentTarget.dataset.ccu;
       if (currentCcu === Store.state.ccu) {
-        console.log(currentCcu, Store.state.ccu);
         Store.state.changeCcu("");
         Store.state.changeDisplay("");
         Store.state.changeSpecialty("");
@@ -230,13 +275,11 @@ const selectCCu = () => {
     toggleSpecialties();
     removeSpecialtyHtmlElements();
     changeInfoText();
-    console.log("1688 VE");
   } else if (
     Store.state.ccu === "" &&
     Store.state.display !== "" &&
     Store.state.specialty !== ""
   ) {
-    console.log("setting display, close ccu");
     toggleSpecialties();
     removeSpecialtyHtmlElements();
     Store.state.specialty("");
@@ -248,7 +291,6 @@ const selectCCu = () => {
     Store.state.changeCcu("");
     changeInfoText();
   } else if (Store.state.ccu !== "" && Store.state.display !== "") {
-    console.log("ccu selected and display", Store.state.display);
     closeDisplayDiv(cameraDisplayDiv);
     removeDisplayBtnHtml();
     resetDisplayBtn();
@@ -259,7 +301,6 @@ const selectCCu = () => {
     changeInfoText();
     listSpecialties();
   } else {
-    console.log("first selection");
     openDisplayDiv();
     rotateOpenArrow();
     changeInfoText();
@@ -267,7 +308,6 @@ const selectCCu = () => {
 };
 
 const rotateOpenArrow = () => {
-  console.log(Store.state.ccu);
   const arrowDiv = document.getElementById(Store.state.ccu + "-arrow");
   arrowDiv.classList.add("open");
 };
@@ -280,7 +320,6 @@ const rotateCloseArrow = () => {
 };
 
 const changeInfoText = () => {
-  console.log(Store.state.settings);
   const infoTag = document.getElementById("info-tag-text");
   if (
     Store.state.ccu !== "" &&
@@ -309,14 +348,12 @@ const displayEventListener = () => {
     item.addEventListener("click", () => {
       const currentDisplay = event.currentTarget.dataset.display;
       if (Store.state.display === currentDisplay) {
-        console.log("same display selected");
         Store.state.changeDisplay("");
         resetDisplayBtn();
         changeInfoText();
         toggleSpecialties();
         removeSpecialtyHtmlElements();
       } else {
-        console.log("display selected", currentDisplay);
         Store.state.changeDisplay(currentDisplay);
         resetDisplayBtn();
         reasignDisplayBtn();
@@ -502,25 +539,24 @@ const populateSettingsTitle = () => {
 };
 
 const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
-  Store.state.settings.map((setting) => {
-    console.log(setting);
-  });
   const settingsTitleContainer = document.getElementById(
     "settings-title-container"
   );
   const settingsBodyCamera = document.createElement("div");
   settingsBodyCamera.setAttribute("class", "settings-body-camera");
   // camera-settings div goes inside settings-body-camera
+
+  Store.state.settings.map((setting) => {});
   const cameraSettingsDiv = document.createElement("div");
   cameraSettingsDiv.setAttribute("class", "camera-settings-div");
 
   // Need to create a loop for these divs
 
   // camera-param goes inside camera-settings-div
-  const cameraParamDiv = document.createElement("div");
-  cameraParamDiv.setAttribute("class", "camera-param-div");
+  const cameraParamsDiv = document.createElement("div");
+  cameraParamsDiv.setAttribute("class", "camera-params-div");
   // camera-param-text goes into camera-param-div
-  cameraSettingsDiv.appendChild(cameraParamDiv);
+  cameraSettingsDiv.appendChild(cameraParamsDiv);
   // camera-param-text goes inside camera-param-div
 
   // camera-setting-div goes inside camera-settings-div
@@ -528,21 +564,20 @@ const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
   cameraSettingDiv.setAttribute("class", "camera-setting-div");
   // camera
 
-  cameraSettingsDiv.appendChild(cameraSettingDiv);
-  settingsBodyCamera.appendChild(cameraSettingDiv);
+  settingsBodyCamera.appendChild(cameraParamsDiv);
+  settingsBodyCamera.appendChild(cameraSettingsDiv);
   settingsTitleContainer.appendChild(settingsBodyCamera);
-  console.log(settingsDisplaySpecialtyContainer);
   // settings-display-specialty-body goes in settings-display-specialty-container
-  const settingsDisplaySpecialtyBody = document.createElement("div");
-  settingsDisplaySpecialtyBody.setAttribute(
-    "class",
-    "settings-display-specialty-body"
-  );
+  // const settingsDisplaySpecialtyBody = document.createElement("div");
+  // settingsDisplaySpecialtyBody.setAttribute(
+  //   "class",
+  //   "settings-display-specialty-body"
+  // );
   // display-settings div goes inside settings-display-specialty-body
-  const displaySettingsDiv = document.createElement("div");
-  displaySettingsDiv.setAttribute("class", "display-settings-div");
-  settingsDisplaySpecialtyBody.appendChild(displaySettingsDiv);
-  settingsDisplaySpecialtyContainer.appendChild(settingsDisplaySpecialtyBody);
+  // const displaySettingsDiv = document.createElement("div");
+  // displaySettingsDiv.setAttribute("class", "display-settings-div");
+  // settingsDisplaySpecialtyBody.appendChild(displaySettingsDiv);
+  // settingsDisplaySpecialtyContainer.appendChild(settingsDisplaySpecialtyBody);
 };
 
 const setSpecialtyBtn = () => {
@@ -562,7 +597,6 @@ const listSpecialties = () => {
     "specialties-parent-div"
   );
   let specialtiesList = Store.state.ccu + "-" + Store.state.display;
-  console.log(specialtiesList);
   SPECIALTIES[specialtiesList].map((specialty) => {
     const specialityBtnDiv = document.createElement("div");
     specialityBtnDiv.setAttribute("class", "specialty-btn-div");
@@ -592,15 +626,12 @@ const removeSpecialtyHtmlElements = () => {
 
 const closeDisplayDiv = () => {
   const monitorsDiv = document.getElementsByClassName("monitors-div active");
-  console.log(monitorsDiv);
   for (let item of monitorsDiv) {
-    console.log(item.classList);
     item.classList.remove("active");
   }
 };
 
 const openDisplayDiv = () => {
-  console.log(Store.state.ccu);
   const monitorsDiv = document.getElementById(
     Store.state.ccu + "-monitors-div"
   );
@@ -625,7 +656,6 @@ const showCurrentDisplays = (currentDisplays) => {
     Store.state.ccu + "-monitors-btns-div"
   );
   currentDisplays.map((display) => {
-    console.log("monitorBtnsDiv", monitorBtnsDiv, display);
     const monitorBtnDiv = document.createElement("div");
     monitorBtnDiv.setAttribute("id", Store.state.ccu + "-" + display.name);
     monitorBtnDiv.setAttribute("class", "monitor-btn-div");
@@ -634,7 +664,6 @@ const showCurrentDisplays = (currentDisplays) => {
     monitorBtnTag.setAttribute("class", "monitor-btn-tag");
     monitorBtnTag.innerHTML = display.name;
     monitorBtnDiv.appendChild(monitorBtnTag);
-    console.log(monitorBtnTag);
     monitorBtnsDiv.appendChild(monitorBtnDiv);
   });
 };
@@ -653,18 +682,14 @@ const resetDisplayBtn = () => {
     "monitor-btn-div-active"
   );
   for (let item of displayBtnDiv) {
-    console.log(item.classList);
     item.className = "monitor-btn-div";
   }
 };
 
 const reasignDisplayBtn = () => {
-  console.log(Store.state.display, Store.state.ccu);
   const displayBtnDiv = document.getElementById(
     Store.state.ccu + "-" + Store.state.display
-    // console.log(Store.state.ccu + "-" + Store.state.display)
   );
-  console.log(displayBtnDiv);
   if (displayBtnDiv !== null) {
     displayBtnDiv.className = "monitor-btn-div-active";
   } else {
