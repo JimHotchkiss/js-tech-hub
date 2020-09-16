@@ -44,6 +44,16 @@ Store.state = {
 const settingsContainer = document.getElementById("settings-container-id");
 
 // 1688 Parameters
+const FOURKPARAMS = [
+  "Red",
+  "Green",
+  "Blue",
+  "Gamma",
+  "Enhancement",
+  "Brightness",
+  "Contrast",
+  "Sharpness",
+];
 const SIXTEENPARAMETERS = [
   "Shutter Mode",
   "Shutter Level",
@@ -449,11 +459,52 @@ const fitlerDisplay = (data) => {
       });
     }
   });
-  populateDisplaySettingsBody();
 };
 
 const populateDisplaySettingsBody = () => {
   console.log(Store.state.displaySettings);
+  // settings-display-specialty-body goes in settings-display-specialty-container
+
+  const settingsDisplaySpecialtyContainer = document.getElementById(
+    "settings-display-specialty-container"
+  );
+  const settingsDisplayBody = document.createElement("div");
+  settingsDisplayBody.setAttribute("class", "settings-display-body");
+  const displayParamsDiv = document.createElement("div");
+  displayParamsDiv.setAttribute("class", "display-params-div");
+
+  FOURKPARAMS.map((param) => {
+    const displayParamDiv = document.createElement("div");
+    displayParamDiv.setAttribute("class", "display-param-div");
+    const displayParamText = document.createElement("p");
+    displayParamText.innerText = param;
+    displayParamDiv.appendChild(displayParamText);
+    displayParamsDiv.appendChild(displayParamDiv);
+  });
+  console.log(settingsDisplaySpecialtyContainer);
+  settingsDisplayBody.appendChild(displayParamsDiv);
+  settingsDisplaySpecialtyContainer.appendChild(settingsDisplayBody);
+
+  const displaySettingsDiv = document.createElement("div");
+  displaySettingsDiv.setAttribute("class", "display-settings-div");
+  Store.state.displaySettings.map((setting) => {
+    const displaySettingDiv = document.createElement("div");
+    displaySettingDiv.setAttribute("class", "display-setting-div");
+    const displaySettingText = document.createElement("p");
+    displaySettingText.setAttribute("class", "display-setting-text");
+    displaySettingText.innerText = setting;
+    displaySettingDiv.appendChild(displaySettingText);
+    displaySettingsDiv.appendChild(displaySettingDiv);
+  });
+
+  settingsDisplayBody.appendChild(displaySettingsDiv);
+  settingsDisplaySpecialtyContainer.appendChild(settingsDisplayBody);
+
+  // display-settings div goes inside settings-display-specialty-body
+  // const displaySettingsDiv = document.createElement("div");
+  // displaySettingsDiv.setAttribute("class", "display-settings-div");
+  // settingsDisplaySpecialtyBody.appendChild(displaySettingsDiv);
+  // settingsDisplaySpecialtyContainer.appendChild(settingsDisplaySpecialtyBody);
 };
 
 const populateCameraSettingsTitle = () => {
@@ -554,6 +605,10 @@ const populateCameraSettingsTitle = () => {
   // // settings-display-specialty-container
   const settingsDisplaySpecialtyContainer = document.createElement("div");
   settingsDisplaySpecialtyContainer.setAttribute(
+    "id",
+    "settings-display-specialty-container"
+  );
+  settingsDisplaySpecialtyContainer.setAttribute(
     "class",
     "settings-display-specialty-container"
   );
@@ -603,17 +658,7 @@ const populateSettingsBody = (settingsTitleContainer) => {
   settingsBodyCamera.appendChild(cameraParamsDiv);
   settingsBodyCamera.appendChild(cameraSettingsDiv);
   settingsTitleContainer.appendChild(settingsBodyCamera);
-  // settings-display-specialty-body goes in settings-display-specialty-container
-  // const settingsDisplaySpecialtyBody = document.createElement("div");
-  // settingsDisplaySpecialtyBody.setAttribute(
-  //   "class",
-  //   "settings-display-specialty-body"
-  // );
-  // display-settings div goes inside settings-display-specialty-body
-  // const displaySettingsDiv = document.createElement("div");
-  // displaySettingsDiv.setAttribute("class", "display-settings-div");
-  // settingsDisplaySpecialtyBody.appendChild(displaySettingsDiv);
-  // settingsDisplaySpecialtyContainer.appendChild(settingsDisplaySpecialtyBody);
+  populateDisplaySettingsBody();
 };
 
 const setSpecialtyBtn = () => {
