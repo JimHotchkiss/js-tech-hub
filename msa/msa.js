@@ -545,24 +545,37 @@ const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
   const settingsBodyCamera = document.createElement("div");
   settingsBodyCamera.setAttribute("class", "settings-body-camera");
   // camera-settings div goes inside settings-body-camera
-
-  Store.state.settings.map((setting) => {});
+  // camera-settings-div goes inside settings-body-camera
   const cameraSettingsDiv = document.createElement("div");
   cameraSettingsDiv.setAttribute("class", "camera-settings-div");
-
-  // Need to create a loop for these divs
-
-  // camera-param goes inside camera-settings-div
   const cameraParamsDiv = document.createElement("div");
   cameraParamsDiv.setAttribute("class", "camera-params-div");
-  // camera-param-text goes into camera-param-div
-  cameraSettingsDiv.appendChild(cameraParamsDiv);
-  // camera-param-text goes inside camera-param-div
+  // populate params
+  SIXTEENPARAMETERS.map((param) => {
+    console.log(param);
+    // camera-param goes inside camera-settings-div
+    const cameraParamDiv = document.createElement("div");
+    cameraParamDiv.setAttribute("class", "camera-param-div");
+    const cameraParamText = document.createElement("p");
+    cameraParamText.setAttribute("class", "camera-param-text");
+    cameraParamText.innerText = param;
+    cameraParamDiv.appendChild(cameraParamText);
+    // camera-param-text goes into camera-param-div
+    cameraParamsDiv.appendChild(cameraParamDiv);
+  });
 
-  // camera-setting-div goes inside camera-settings-div
-  const cameraSettingDiv = document.createElement("div");
-  cameraSettingDiv.setAttribute("class", "camera-setting-div");
-  // camera
+  // populate settings
+  Store.state.settings.map((setting) => {
+    // camera-setting-div goes inside camera-settings-div
+    const cameraSettingDiv = document.createElement("div");
+    cameraSettingDiv.setAttribute("class", "camera-setting-div");
+    const cameraSettingText = document.createElement("p");
+    cameraSettingText.setAttribute("class", "camera-setting-text");
+    cameraSettingText.innerText = setting;
+    cameraSettingDiv.appendChild(cameraSettingText);
+
+    cameraSettingsDiv.appendChild(cameraSettingDiv);
+  });
 
   settingsBodyCamera.appendChild(cameraParamsDiv);
   settingsBodyCamera.appendChild(cameraSettingsDiv);
