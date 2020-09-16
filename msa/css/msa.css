@@ -602,8 +602,8 @@ html {
 }
 
 .camera-param-div {
-  height: 50px;
-  border-bottom: 1px solid #707070;
+  height: 53px;
+  border-bottom: 1px solid #eaeef2;
   /* width: 300px; */
 }
 
@@ -611,10 +611,10 @@ html {
   text-align: left;
   font-family: Roboto;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0px;
-  color: #000000;
-  opacity: 0.7;
+  color: #707070;
+  padding: 19px 0 0 29px;
 }
 
 .camera-setting-div p {
@@ -627,8 +627,8 @@ html {
 }
 
 .camera-setting-div {
-  height: 50px;
-  border-bottom: 1px solid #707070;
+  height: 53px;
+  border-bottom: 1px solid #eaeef2;
   /* width: 300px; */
 }
 
