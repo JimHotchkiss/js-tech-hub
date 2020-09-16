@@ -26,7 +26,8 @@ Store.state = {
   ccu: "",
   display: "",
   specialty: "",
-  settings: {},
+  ccuSettings: {},
+  displaySettings: {},
   changeCcu: (input) => {
     Store.state.ccu = input;
   },
@@ -413,14 +414,17 @@ const fetchSettings = () => {
 };
 
 const filterCcu = (data) => {
+  fitlerDisplay(data);
   data.ccus.map((ccu) => {
     if (ccu[Store.state.ccu]) {
       ccu[Store.state.ccu]["monitors"].map((monitor) => {
         if (monitor[Store.state.display]) {
           monitor[Store.state.display]["specialties"].map((specialty) => {
-            if (specialty[Store.state.specialty]) {
-              Store.state.changeSettings(specialty[Store.state.specialty]);
-              populateSettingsTitle();
+            if (specialty[Store.state.specialty] !== undefined) {
+              Store.state.ccuSettings =
+                specialty[Store.state.specialty]["ccu-settings"];
+              ["ccu-settings"];
+              populateCameraSettingsTitle();
             }
           });
         }
@@ -429,7 +433,30 @@ const filterCcu = (data) => {
   });
 };
 
-const populateSettingsTitle = () => {
+const fitlerDisplay = (data) => {
+  data.ccus.map((ccu) => {
+    if (ccu[Store.state.ccu]) {
+      ccu[Store.state.ccu]["monitors"].map((monitor) => {
+        if (monitor[Store.state.display]) {
+          console.log(monitor[Store.state.display]["specialties"]);
+          monitor[Store.state.display]["specialties"].map((item) => {
+            if (item[Store.state.specialty]) {
+              Store.state.displaySettings =
+                item[Store.state.specialty]["display-settings"];
+            }
+          });
+        }
+      });
+    }
+  });
+  populateDisplaySettingsBody();
+};
+
+const populateDisplaySettingsBody = () => {
+  console.log(Store.state.displaySettings);
+};
+
+const populateCameraSettingsTitle = () => {
   const settingsTitleContainer = document.createElement("div");
   settingsTitleContainer.setAttribute("class", "settings-title-container");
   settingsTitleContainer.setAttribute("id", "settings-title-container");
@@ -535,13 +562,10 @@ const populateSettingsTitle = () => {
   settingsDisplaySpecialtyContainer.appendChild(settingsTitleDisplay);
   settingsContainer.appendChild(settingsDisplaySpecialtyContainer);
 
-  populateSettingsBody(settingsDisplaySpecialtyContainer);
+  populateSettingsBody(settingsTitleContainer);
 };
 
-const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
-  const settingsTitleContainer = document.getElementById(
-    "settings-title-container"
-  );
+const populateSettingsBody = (settingsTitleContainer) => {
   const settingsBodyCamera = document.createElement("div");
   settingsBodyCamera.setAttribute("class", "settings-body-camera");
   // camera-settings div goes inside settings-body-camera
@@ -552,7 +576,6 @@ const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
   cameraParamsDiv.setAttribute("class", "camera-params-div");
   // populate params
   SIXTEENPARAMETERS.map((param) => {
-    console.log(param);
     // camera-param goes inside camera-settings-div
     const cameraParamDiv = document.createElement("div");
     cameraParamDiv.setAttribute("class", "camera-param-div");
@@ -565,7 +588,7 @@ const populateSettingsBody = (settingsDisplaySpecialtyContainer) => {
   });
 
   // populate settings
-  Store.state.settings.map((setting) => {
+  Store.state.ccuSettings.map((setting) => {
     // camera-setting-div goes inside camera-settings-div
     const cameraSettingDiv = document.createElement("div");
     cameraSettingDiv.setAttribute("class", "camera-setting-div");
