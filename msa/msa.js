@@ -1,4 +1,7 @@
 window.onload = function loadCcus() {
+  // if (window.screen.width <= 414) {
+  //   mobileScreen();
+  // }
   ccuEventListener();
   displayEventListener();
   formEventListener();
@@ -7,19 +10,10 @@ window.onload = function loadCcus() {
 
 const Store = function _Store() {};
 
-function Store1(camera, display, specialty, {}) {
-  (this.camera = camera),
-    (this.display = display),
-    (this.specialty = specialty),
-    (this.setting = {});
-}
-
-Store1.prototype.setSettingTitle = function () {
-  const settingsContainerId = document.getElementById("settings-container-id");
-  const testDiv = documment.createElement("div");
-  testDiv.setAttribute("class", "test-div");
-  testDiv.innerText = "Test div";
-  settingsContainerId.appendChild(testDiv);
+const mobileScreen = () => {
+  console.log(window.screen.width);
+  const outsideContainer = document.getElementsByClassName("outside-container");
+  outsideContainer[0].classList.add("hide");
 };
 
 Store.state = {
@@ -358,7 +352,17 @@ const displayEventListener = () => {
   for (let item of monitorBtnDivs) {
     item.addEventListener("click", () => {
       const currentDisplay = event.currentTarget.dataset.display;
-      if (Store.state.display === currentDisplay) {
+      if (
+        Store.state.ccu !== "" &&
+        Store.state.display !== "" &&
+        Store.state.specialty !== ""
+      ) {
+        Store.state.changeDisplay(currentDisplay);
+        fetchSettings();
+        clearSettingsHtml();
+        resetDisplayBtn();
+        reasignDisplayBtn();
+      } else if (Store.state.display === currentDisplay) {
         Store.state.changeDisplay("");
         resetDisplayBtn();
         changeInfoText();
@@ -434,12 +438,19 @@ const fetchSettings = () => {
 
 const filterCcu = (data) => {
   fitlerDisplay(data);
+  console.log(data, Store.state.display);
   data.ccus.map((ccu) => {
     if (ccu[Store.state.ccu]) {
+      console.log("1", ccu[Store.state.ccu]);
       ccu[Store.state.ccu]["monitors"].map((monitor) => {
         if (monitor[Store.state.display]) {
+          console.log("2", monitor[Store.state.display]);
           monitor[Store.state.display]["specialties"].map((specialty) => {
             if (specialty[Store.state.specialty] !== undefined) {
+              console.log(
+                "3",
+                specialty[Store.state.specialty]["ccu-settings"]
+              );
               Store.state.ccuSettings =
                 specialty[Store.state.specialty]["ccu-settings"];
               ["ccu-settings"];
@@ -453,6 +464,7 @@ const filterCcu = (data) => {
 };
 
 const fitlerDisplay = (data) => {
+  console.log(data);
   data.ccus.map((ccu) => {
     if (ccu[Store.state.ccu]) {
       ccu[Store.state.ccu]["monitors"].map((monitor) => {
@@ -470,8 +482,6 @@ const fitlerDisplay = (data) => {
 };
 
 const populateDisplaySettingsBody = () => {
-  // settings-display-specialty-body goes in settings-display-specialty-container
-
   const settingsDisplaySpecialtyContainer = document.getElementById(
     "settings-display-specialty-container"
   );
@@ -505,15 +515,10 @@ const populateDisplaySettingsBody = () => {
 
   settingsDisplayBody.appendChild(displaySettingsDiv);
   settingsDisplaySpecialtyContainer.appendChild(settingsDisplayBody);
-
-  // display-settings div goes inside settings-display-specialty-body
-  // const displaySettingsDiv = document.createElement("div");
-  // displaySettingsDiv.setAttribute("class", "display-settings-div");
-  // settingsDisplaySpecialtyBody.appendChild(displaySettingsDiv);
-  // settingsDisplaySpecialtyContainer.appendChild(settingsDisplaySpecialtyBody);
 };
 
 const populateCameraSettingsTitle = () => {
+  console.log("populate camera title", Store.state.ccuSettings);
   const settingsTitleContainer = document.createElement("div");
   settingsTitleContainer.setAttribute("class", "settings-title-container");
   settingsTitleContainer.setAttribute("id", "settings-title-container");
@@ -649,6 +654,7 @@ const populateSettingsBody = (settingsTitleContainer) => {
   });
 
   // populate settings
+  console.log(Store.state);
   Store.state.ccuSettings.map((setting) => {
     // camera-setting-div goes inside camera-settings-div
     const cameraSettingDiv = document.createElement("div");
@@ -774,7 +780,6 @@ const removeDisplayBtnHtml = () => {
 };
 
 const resetDisplayBtn = () => {
-  console.log("select display btn");
   const displayBtnDiv = document.getElementsByClassName(
     "monitor-btn-div active"
   );
@@ -787,6 +792,7 @@ const reasignDisplayBtn = () => {
   const displayBtnDiv = document.getElementById(
     Store.state.ccu + "-" + Store.state.display
   );
+  console.log(displayBtnDiv);
   if (displayBtnDiv !== null) {
     displayBtnDiv.classList.toggle("active");
   } else {

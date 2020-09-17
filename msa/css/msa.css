@@ -18,7 +18,11 @@ html {
   width: 100%;
   height: auto;
   margin: 0;
-  background: pink;
+  z-index: 100000;
+}
+
+.outside-container.hide {
+  display: none;
 }
 
 .top-header {
@@ -727,4 +731,20 @@ html {
   width: 300px;
   height: 400px;
   background: lightsteelblue;
+}
+
+/* Mobile Container */
+.mobile-container {
+  width: 500px;
+  height: 500px;
+  background: blue;
+  display: none;
+}
+@media (max-width: 477px) {
+  .outside-container {
+    display: none;
+  }
+  .mobile-container {
+    display: flex;
+  }
 }
