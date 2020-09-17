@@ -380,9 +380,18 @@ const specialtiesEventListener = () => {
   for (let item of specialityBtnDiv) {
     item.addEventListener("click", () => {
       const currentSpecialty = event.currentTarget.dataset.specialty;
-      if (Store.state.specialty === currentSpecialty) {
-        resetSpecialtyState();
+      console.log(
+        "state:",
+        Store.state.specialty,
+        "current:",
+        currentSpecialty
+      );
+      if (Store.state.specialty !== "" && currentSpecialty !== "") {
+        console.log("different specialty");
+        Store.state.changeSpecialty(currentSpecialty);
+        fetchSettings();
         clearSettingsHtml();
+        setSpecialtyBtn();
       } else {
         Store.state.changeSpecialty(currentSpecialty);
         setSpecialtyBtn();
@@ -448,7 +457,6 @@ const fitlerDisplay = (data) => {
     if (ccu[Store.state.ccu]) {
       ccu[Store.state.ccu]["monitors"].map((monitor) => {
         if (monitor[Store.state.display]) {
-          console.log(monitor[Store.state.display]["specialties"]);
           monitor[Store.state.display]["specialties"].map((item) => {
             if (item[Store.state.specialty]) {
               Store.state.displaySettings =
@@ -462,7 +470,6 @@ const fitlerDisplay = (data) => {
 };
 
 const populateDisplaySettingsBody = () => {
-  console.log(Store.state.displaySettings);
   // settings-display-specialty-body goes in settings-display-specialty-container
 
   const settingsDisplaySpecialtyContainer = document.getElementById(
@@ -481,7 +488,6 @@ const populateDisplaySettingsBody = () => {
     displayParamDiv.appendChild(displayParamText);
     displayParamsDiv.appendChild(displayParamDiv);
   });
-  console.log(settingsDisplaySpecialtyContainer);
   settingsDisplayBody.appendChild(displayParamsDiv);
   settingsDisplaySpecialtyContainer.appendChild(settingsDisplayBody);
 
@@ -662,8 +668,17 @@ const populateSettingsBody = (settingsTitleContainer) => {
 };
 
 const setSpecialtyBtn = () => {
+  const specialtyBtnActive = document.getElementsByClassName(
+    "specialty-btn-div active"
+  );
+  console.log(specialtyBtnActive.length);
   const specialtyBtn = document.getElementById(Store.state.specialty);
-  specialtyBtn.className = "specialty-btn-div-active";
+  if (specialtyBtnActive.length !== 0) {
+    for (let item of specialtyBtnActive) {
+      item.classList.remove("active");
+    }
+  }
+  specialtyBtn.classList.add("active");
 };
 
 const toggleInfo = () => {
@@ -759,8 +774,9 @@ const removeDisplayBtnHtml = () => {
 };
 
 const resetDisplayBtn = () => {
+  console.log("select display btn");
   const displayBtnDiv = document.getElementsByClassName(
-    "monitor-btn-div-active"
+    "monitor-btn-div active"
   );
   for (let item of displayBtnDiv) {
     item.className = "monitor-btn-div";
@@ -772,7 +788,7 @@ const reasignDisplayBtn = () => {
     Store.state.ccu + "-" + Store.state.display
   );
   if (displayBtnDiv !== null) {
-    displayBtnDiv.className = "monitor-btn-div-active";
+    displayBtnDiv.classList.toggle("active");
   } else {
     Store.state.changeDisplay("");
   }
