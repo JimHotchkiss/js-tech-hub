@@ -1,7 +1,4 @@
 window.onload = function loadCcus() {
-  // if (window.screen.width <= 414) {
-  //   mobileScreen();
-  // }
   ccuEventListener();
   displayEventListener();
   formEventListener();
@@ -9,12 +6,6 @@ window.onload = function loadCcus() {
 };
 
 const Store = function _Store() {};
-
-const mobileScreen = () => {
-  console.log(window.screen.width);
-  const outsideContainer = document.getElementsByClassName("outside-container");
-  outsideContainer[0].classList.add("hide");
-};
 
 Store.state = {
   ccu: "",
@@ -296,6 +287,7 @@ const selectCCu = () => {
     Store.state.changeCcu("");
     changeInfoText();
   } else if (Store.state.ccu !== "" && Store.state.display !== "") {
+    console.log("switching ccus");
     closeDisplayDiv(cameraDisplayDiv);
     removeDisplayBtnHtml();
     resetDisplayBtn();
@@ -362,18 +354,26 @@ const displayEventListener = () => {
         clearSettingsHtml();
         resetDisplayBtn();
         reasignDisplayBtn();
+      } else if (Store.state.ccu !== "" && Store.state.display !== "") {
+        console.log("ccu, display selected");
+        Store.state.changeDisplay(currentDisplay);
+        resetDisplayBtn();
+        reasignDisplayBtn();
       } else if (Store.state.display === currentDisplay) {
+        console.log("same display");
         Store.state.changeDisplay("");
         resetDisplayBtn();
         changeInfoText();
         toggleSpecialties();
         removeSpecialtyHtmlElements();
       } else {
+        console.log("first pick");
         Store.state.changeDisplay(currentDisplay);
         resetDisplayBtn();
         reasignDisplayBtn();
         changeInfoText();
         listSpecialties();
+        toggleSpecialties();
       }
     });
   }
@@ -693,8 +693,9 @@ const toggleInfo = () => {
 };
 
 const listSpecialties = () => {
+  console.log("list specialties");
   removeSpecialtyHtmlElements();
-  toggleSpecialties();
+  // toggleSpecialties();
   const specialtiesParentDiv = document.getElementById(
     "specialties-parent-div"
   );
@@ -715,7 +716,9 @@ const listSpecialties = () => {
 };
 
 const toggleSpecialties = () => {
+  console.log("toggle specialties");
   const specialtiesDiv = document.getElementById("specialties-div");
+  console.log(specialtiesDiv);
   specialtiesDiv.classList.toggle("show");
 };
 
