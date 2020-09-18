@@ -740,7 +740,8 @@ html {
   background: blue;
   display: none;
 }
-@media (max-width: 477px) {
+
+@media only screen and (min-width: 768px) and (max-width: 959px) {
   .outside-container {
     display: none;
   }
